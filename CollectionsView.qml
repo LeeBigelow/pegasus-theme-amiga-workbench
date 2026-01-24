@@ -49,7 +49,7 @@ FocusScope {
             detailsView.currentGameIndex = api.memory.get('gameIndex') || 0;
         }
         //detailsView.focus = true;
-    } 
+    }
 
 
 
@@ -164,7 +164,7 @@ FocusScope {
                 verticalTileMode: BorderImage.Repeat
                 source: "assets/amiga-border-unfocused.png"
             }
-            
+
 
         }
     }
@@ -203,7 +203,7 @@ FocusScope {
 
             focus: true
 
-            Keys.onPressed: 
+            Keys.onPressed:
                 if (event.isAutoRepeat) {
                     return;
                 } else if (api.keys.isNextPage(event)) {
@@ -314,7 +314,7 @@ FocusScope {
 
         FooterImage {
             id: bButton
-            anchors.left: leftRightButton.right 
+            anchors.left: leftRightButton.right
             anchors.bottom: parent.bottom
             imageSource: "assets/button_b.svg"
             imageLabel: "Select"

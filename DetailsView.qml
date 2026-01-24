@@ -21,9 +21,9 @@ FocusScope {
     property alias currentGameIndex: gameList.currentIndex
     readonly property var currentGame: switch(currentCollection.shortName) {
         case "auto-lastplayed":
-            return lastPlayedCollection.sourceGame(currentGameIndex); 
+            return lastPlayedCollection.sourceGame(currentGameIndex);
         case "auto-favorites":
-            return favoritesCollection.sourceGame(currentGameIndex); 
+            return favoritesCollection.sourceGame(currentGameIndex);
         default:
             return currentCollection.games.get(currentGameIndex);
     }
@@ -47,7 +47,7 @@ FocusScope {
     // Key handling. In addition, pressing left/right also moves to the prev/next collection.
     Keys.onLeftPressed: prevCollection()
     Keys.onRightPressed: nextCollection()
-    Keys.onPressed: 
+    Keys.onPressed:
         if (event.isAutoRepeat) {
             return;
         } else if (api.keys.isAccept(event)) {
@@ -95,7 +95,7 @@ FocusScope {
         height: root.height
         // background
         anchors.fill: parent
-        color: clrAmigaBlue 
+        color: clrAmigaBlue
     }
 
     //
@@ -105,7 +105,7 @@ FocusScope {
 
     Rectangle {
         id: header
-        anchors { 
+        anchors {
             top: parent.top
             right: parent.right
             left: parent.left
@@ -154,7 +154,7 @@ FocusScope {
             }
             height: vpx(100)
             fillMode: Image.PreserveAspectFit
-            source: currentCollection.shortName ? 
+            source: currentCollection.shortName ?
                 "logo/%1.svg".arg(currentCollection.shortName) : undefined
             asynchronous: true
         }
@@ -193,9 +193,9 @@ FocusScope {
 
                 width: ListView.view.width
                 height: gameTitle.height
-                color: 
+                color:
                     if (selected) {
-                        gameList.activeFocus ? "white" : clrAmigaBlue; 
+                        gameList.activeFocus ? "white" : clrAmigaBlue;
                     } else {
                         return "transparent";
                     }
@@ -203,7 +203,7 @@ FocusScope {
                 Text {
                     id: gameTitle
                     text: (modelData.favorite ? "★" : "") + " " + modelData.title
-                    color: 
+                    color:
                         if (selected) {
                             gameList.activeFocus ? clrAmigaBlue : "black";
                         } else {
@@ -233,7 +233,7 @@ FocusScope {
 
             // toggle focus on tab and details key (i)
             KeyNavigation.tab: descriptionScroll
-            Keys.onPressed: 
+            Keys.onPressed:
                 if (event.isAutoRepeat) {
                     return;
                 } else if (api.keys.isDetails(event)) {
@@ -388,15 +388,15 @@ FocusScope {
                 policy: descriptionScroll.activeFocus ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
             }
 
-            // Keybindings for descriptionScroll 
+            // Keybindings for descriptionScroll
             // scroll description on up and down
-            Keys.onUpPressed: 
+            Keys.onUpPressed:
                 if ((contentY - 10) < 0) {
                     contentY = 0;
-                } else { 
+                } else {
                     contentY -= 10;
                 }
-            Keys.onDownPressed: 
+            Keys.onDownPressed:
                 if ((contentY + 10) > (gameDescription.height - height)) {
                     contentY = gameDescription.height - height;
                 } else {
@@ -404,7 +404,7 @@ FocusScope {
                 }
             // Toggle focus on tab and details key (i)
             KeyNavigation.tab: gameList
-            Keys.onPressed: 
+            Keys.onPressed:
                 if (event.isAutoRepeat) {
                     return;
                 } else if (api.keys.isDetails(event)) {
@@ -414,7 +414,7 @@ FocusScope {
                 }
         }
     }
-    
+
     Rectangle {
         id: footer
         anchors {
