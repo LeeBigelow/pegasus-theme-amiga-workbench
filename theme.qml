@@ -5,6 +5,14 @@ FocusScope {
     // and can be referred to using their name and weight.
     FontLoader { source: "fonts/OPENSANS.TTF" }
     FontLoader { source: "fonts/OPENSANS-LIGHT.TTF" }
+    FontLoader {
+        id: amigaFont
+        source: "fonts/topaz_unicode_ks13_regular.ttf"
+    }
+    FontLoader {
+        id: amigaFontBold
+        source: "fonts/topaz_unicode_ks13_bold.ttf"
+    }
 
     // a empty collections model we can add to
     ListModel { id: extendedCollections }

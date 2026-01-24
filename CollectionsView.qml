@@ -127,16 +127,7 @@ FocusScope {
                 border { left: 30; top: 60; right: 60; bottom: 60 }
                 horizontalTileMode: BorderImage.Repeat
                 verticalTileMode: BorderImage.Repeat
-                source: "assets/amiga-border.png"
-                Text {
-                    anchors {
-                        top: parent.top
-                        left: parent.left
-                        leftMargin: 40
-                    }
-                    text: "HELLO"
-                    color: "black"
-                }
+                source: "assets/amiga-border-unfocused.png"
             }
 
             // controller
@@ -145,16 +136,16 @@ FocusScope {
                 anchors {
                     top: parent.top
                     topMargin: root.padding * 3
-                    right: parent.right
-                    rightMargin: root.padding * 3
+                    left: consoleGameImage.right
+                    leftMargin: vpx(100)
                 }
                 height: vpx(150)
-                width: parent.width / 3
+                width: vpx(100)
                 fillMode: Image.PreserveAspectFit
                 source: model.shortName ? "controller/%1.svg".arg(model.shortName) : ""
                 asynchronous: true
                 horizontalAlignment: Image.AlignCenter
-                verticalAlignment: Image.AlignBottom
+                verticalAlignment: Image.AlignVCenter
             }
 
             BorderImage {
@@ -171,7 +162,7 @@ FocusScope {
                 border { left: 30; top: 60; right: 60; bottom: 60 }
                 horizontalTileMode: BorderImage.Repeat
                 verticalTileMode: BorderImage.Repeat
-                source: "assets/amiga-border.png"
+                source: "assets/amiga-border-unfocused.png"
             }
             
 
@@ -264,8 +255,8 @@ FocusScope {
             anchors.centerIn: parent
             text: "%1 GAMES".arg(currentCollection.games.count)
             color: "white"
-            font.pixelSize: vpx(25)
-            font.family: "Open Sans"
+            font.pixelSize: vpx(18)
+            font.family: amigaFont.name
         }
     }
 
@@ -273,9 +264,9 @@ FocusScope {
     BorderImage {
         anchors {
             left: parent.left
-            leftMargin: parent.width / 3
+            leftMargin: vpx(350)
             right: parent.right
-            rightMargin: parent.widht / 3
+            rightMargin: vpx(350)
             top: logoBar.bottom
             topMargin: vpx(30)
             bottom: footer.top
@@ -284,15 +275,15 @@ FocusScope {
         border { left: 30; top: 60; right: 60; bottom: 60 }
         horizontalTileMode: BorderImage.Repeat
         verticalTileMode: BorderImage.Repeat
-        source: "assets/amiga-border.png"
+        source: "assets/amiga-border-unfocused.png"
 
         Text {
             id: collectionInfoLabel
             anchors.centerIn: parent
             text: collectionInfo.info.join("\n")
             color: "white"
-            font.pixelSize: vpx(12)
-            font.family: "Open Sans"
+            font.pixelSize: vpx(14)
+            font.family: amigaFont.name
             elide: Text.ElideRight
             topPadding: vpx(30)
             leftPadding: vpx(10)
