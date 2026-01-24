@@ -5,7 +5,7 @@ import QtQuick 2.0
 Text {
     font.pixelSize: vpx(20)
     font.capitalization: Font.Capitalize
-    font.family: "Open Sans"
+    font.family: amigaFont.name
     height: root.detailsTextHeight
     width: parent.width
     elide: Text.ElideRight

@@ -27,7 +27,7 @@ Item {
         anchors.leftMargin: vpx(5)
         anchors.verticalCenter: parent.verticalCenter
         color: "#FFFFFF"
-        font.family: "Open Sans"
+        font.family: amigaFont.name
         font.pixelSize: vpx(18)
         text: imageLabel
     }

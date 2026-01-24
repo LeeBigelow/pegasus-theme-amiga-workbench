@@ -5,7 +5,7 @@ import QtQuick 2.0
 Text {
     font.pixelSize: vpx(20)
     font.capitalization: Font.AllUppercase
-    font.family: "Open Sans"
+    font.family: amigaFont.name
     font.weight: Font.DemiBold
     height: root.detailsTextHeight
     color: "white"

@@ -31,7 +31,7 @@ Item {
         id: label
         anchors.centerIn: parent
         color: "#000"
-        font.family: "Open Sans"
+        font.family: amigaFont.name
         font.pixelSize: vpx(50)
         text: shortName || longName
 

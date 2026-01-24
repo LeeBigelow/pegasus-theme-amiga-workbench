@@ -212,7 +212,7 @@ FocusScope {
 
                     font.pixelSize: vpx(20)
                     font.capitalization: Font.AllUppercase
-                    font.family: "Open Sans"
+                    font.family: amigaFont.name
                     font.weight: Font.DemiBold
 
                     lineHeight: 1.2
@@ -379,7 +379,7 @@ FocusScope {
                 width: descriptionScroll.width
                 //elide: Text.ElideRight
                 font.pixelSize: vpx(16)
-                font.family: "Open Sans"
+                font.family: amigaFont.name
                 font.weight: Font.DemiBold
                 color: "white"
             }
