@@ -110,7 +110,7 @@ FocusScope {
                 source: model.shortName ? "consolegame/%1.svg".arg(model.shortName) : ""
                 asynchronous: true
                 sourceSize.height: vpx(150)
-                horizontalAlignment: Image.AlignCenter
+                horizontalAlignment: Image.AlignHCenter
                 verticalAlignment: Image.AlignVCenter
             }
 
@@ -128,7 +128,7 @@ FocusScope {
                 fillMode: Image.PreserveAspectFit
                 source: model.shortName ? "controller/%1.svg".arg(model.shortName) : ""
                 asynchronous: true
-                horizontalAlignment: Image.AlignCenter
+                horizontalAlignment: Image.AlignHCenter
                 verticalAlignment: Image.AlignVCenter
             }
         }
