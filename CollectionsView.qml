@@ -90,9 +90,9 @@ FocusScope {
             visible: PathView.onPath // optimization: do not draw if not visible
 
             // background
-            Rectangle {
+            Image {
                 anchors.fill: parent
-                color: colorAmigaBlue
+                source: "assets/background-collections-720.png"
             }
 
             // console + game
@@ -180,6 +180,17 @@ FocusScope {
                 }
 
             onItemSelected: root.collectionSelected()
+        }
+
+        Image {
+            anchors {
+                left: parent.left
+                top: parent.top
+                topMargin: vpx(-20)
+            }
+            height: vpx(208)
+            width: parent.width
+            source: "assets/window-system-720.png"
         }
     }
 
