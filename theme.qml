@@ -1,6 +1,8 @@
 import QtQuick 2.0
 
 FocusScope {
+    id: root
+
     // Loading the fonts here makes them usable in the rest of the theme
     // and can be referred to using their name and weight.
     FontLoader { source: "fonts/OPENSANS.TTF" }
@@ -13,6 +15,9 @@ FocusScope {
         id: amigaFontBold
         source: "fonts/topaz_unicode_ks13_bold.ttf"
     }
+
+    property color colorAmigaBlue: "#0057AF"
+    property color colorAmigaOrange: "#FF8800"
 
     // a empty collections model we can add to
     ListModel { id: extendedCollections }
@@ -31,6 +36,8 @@ FocusScope {
         favoritesCollection: favoritesCollection
         lastPlayedCollection: lastPlayedCollection
 
+        colorAmigaBlue: root.colorAmigaBlue
+
         focus: true
         onCollectionSelected: detailsView.focus = true
     }
@@ -42,6 +49,9 @@ FocusScope {
         currentCollection: collectionsView.currentCollection
         favoritesCollection: favoritesCollection
         lastPlayedCollection: lastPlayedCollection
+
+        colorAmigaBlue: root.colorAmigaBlue
+        colorAmigaOrange: root.colorAmigaOrange
 
         onCancel: collectionsView.focus = true
         onNextCollection: {

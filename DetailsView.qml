@@ -12,8 +12,8 @@ FocusScope {
     property var favoritesCollection
     property var lastPlayedCollection
 
-    property var clrAmigaBlue: "#0057AF"
-    property var clrAmigaOrange: "#FF8800"
+    property var colorAmigaBlue
+    property var colorAmigaOrange
     property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
 
     // Shortcuts for the game list's currently selected game
@@ -95,7 +95,7 @@ FocusScope {
         height: root.height
         // background
         anchors.fill: parent
-        color: clrAmigaBlue
+        color: colorAmigaBlue
     }
 
     //
@@ -195,7 +195,7 @@ FocusScope {
                 height: gameTitle.height
                 color:
                     if (selected) {
-                        gameList.activeFocus ? "white" : clrAmigaBlue;
+                        gameList.activeFocus ? "white" : colorAmigaBlue;
                     } else {
                         return "transparent";
                     }
@@ -205,7 +205,7 @@ FocusScope {
                     text: (modelData.favorite ? "★" : "") + " " + modelData.title
                     color:
                         if (selected) {
-                            gameList.activeFocus ? clrAmigaBlue : "black";
+                            gameList.activeFocus ? colorAmigaBlue : "black";
                         } else {
                             return "white";
                         }

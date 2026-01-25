@@ -7,7 +7,6 @@ Item {
     property string imageLabel
     height: vpx(40)
     width: vpx(15) + label.contentWidth + image.paintedWidth
-    opacity: 0.45
 
     Image {
         id: image
@@ -26,7 +25,7 @@ Item {
         anchors.left: image.right
         anchors.leftMargin: vpx(5)
         anchors.verticalCenter: parent.verticalCenter
-        color: "#FFFFFF"
+        color: "white"
         font.family: amigaFont.name
         font.pixelSize: vpx(18)
         text: imageLabel

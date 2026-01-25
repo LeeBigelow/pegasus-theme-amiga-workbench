@@ -27,6 +27,7 @@ FocusScope {
     property var extendedCollections
     property var lastPlayedCollection
     property var favoritesCollection
+    property color colorAmigaBlue
 
     readonly property int padding: vpx(20)
 
@@ -91,7 +92,7 @@ FocusScope {
             // background
             Rectangle {
                 anchors.fill: parent
-                color: "#0057AF"
+                color: colorAmigaBlue
             }
 
             // console + game
@@ -108,26 +109,9 @@ FocusScope {
                 fillMode: Image.PreserveAspectFit
                 source: model.shortName ? "consolegame/%1.svg".arg(model.shortName) : ""
                 asynchronous: true
-                sourceSize.height: 1024
+                sourceSize.height: vpx(150)
                 horizontalAlignment: Image.AlignCenter
                 verticalAlignment: Image.AlignVCenter
-            }
-
-            BorderImage {
-                anchors {
-                    top: consoleGameImage.top
-                    topMargin: vpx(-30)
-                    bottom: consoleGameImage.bottom
-                    bottomMargin: vpx(-30)
-                    left: consoleGameImage.left
-                    leftMargin: vpx(-30)
-                    right: consoleGameImage.right
-                    rightMargin: vpx(-40)
-                }
-                border { left: 30; top: 60; right: 60; bottom: 60 }
-                horizontalTileMode: BorderImage.Repeat
-                verticalTileMode: BorderImage.Repeat
-                source: "assets/amiga-border-unfocused.png"
             }
 
             // controller
@@ -147,25 +131,6 @@ FocusScope {
                 horizontalAlignment: Image.AlignCenter
                 verticalAlignment: Image.AlignVCenter
             }
-
-            BorderImage {
-                anchors {
-                    top: controllerImage.top
-                    topMargin: vpx(-30)
-                    bottom: controllerImage.bottom
-                    bottomMargin: vpx(-30)
-                    left: controllerImage.left
-                    leftMargin: vpx(-30)
-                    right: controllerImage.right
-                    rightMargin: vpx(-40)
-                }
-                border { left: 30; top: 60; right: 60; bottom: 60 }
-                horizontalTileMode: BorderImage.Repeat
-                verticalTileMode: BorderImage.Repeat
-                source: "assets/amiga-border-unfocused.png"
-            }
-
-
         }
     }
 
@@ -216,22 +181,6 @@ FocusScope {
 
             onItemSelected: root.collectionSelected()
         }
-
-        BorderImage {
-            anchors {
-                top: logoBar.top
-                topMargin: vpx(-10)
-                bottom: logoBar.bottom
-                bottomMargin: vpx(-10)
-                left: logoBar.left
-                right: logoBar.right
-            }
-            border { left: 30; top: 60; right: 60; bottom: 60 }
-            horizontalTileMode: BorderImage.Repeat
-            verticalTileMode: BorderImage.Repeat
-            source: "assets/amiga-border.png"
-        }
-
     }
 
     // Game count bar -- like above, I've put it in an Item to separately control opacity
@@ -246,7 +195,7 @@ FocusScope {
 
         Rectangle {
             anchors.fill: parent
-            color: "#00000000" //transparent
+            color: "transparent"
             opacity: 0.85
         }
 
@@ -261,7 +210,7 @@ FocusScope {
     }
 
     // Collection Info section
-    BorderImage {
+    Item {
         anchors {
             left: parent.left
             leftMargin: vpx(350)
@@ -272,10 +221,6 @@ FocusScope {
             bottom: footer.top
         }
         width: parent.width / 3
-        border { left: 30; top: 60; right: 60; bottom: 60 }
-        horizontalTileMode: BorderImage.Repeat
-        verticalTileMode: BorderImage.Repeat
-        source: "assets/amiga-border-unfocused.png"
 
         Text {
             id: collectionInfoLabel
@@ -302,7 +247,7 @@ FocusScope {
             rightMargin: root.padding
         }
         height: vpx(40)
-        color: "#00000000"
+        color: "transparent"
 
         FooterImage {
             id: leftRightButton
