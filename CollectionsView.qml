@@ -81,81 +81,104 @@ FocusScope {
     }
 
     Component {
-        // Either the image for the collection or a single colored rectangle
+        // background color, titlebar, windows and images
         id: bgAxisItem
 
         Item {
+            anchors.fill: parent
             width: root.width
             height: root.height
             visible: PathView.onPath // optimization: do not draw if not visible
 
             // background
-            Image {
+            Rectangle {
                 anchors.fill: parent
-                source: "assets/background-collections.png"
+                color: colorAmigaBlue
+            }
+
+            // titlebar
+            Image {
+                id: titlebar
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                }
+                width: parent.width
+                height: vpx(20)
+                source: "assets/collections-titlebar.png"
+                asynchronous: true
+            }
+
+            // Game count in titlebar
+            Text {
+                id: gamecount
+                anchors.centerIn: titlebar
+                text: "%1: %2 GAMES".arg(currentCollection.shortName).arg(currentCollection.games.count)
+                color: colorAmigaBlue
+                font.pixelSize: vpx(16)
+                font.family: amigaFont.name
+                horizontalAlignment: Text.alignHCenter
             }
 
             // console + game
             Image {
                 id: consoleGameWindow
                 anchors {
-                    top: parent.top
-                    topMargin: vpx(30)
+                    top: titlebar.bottom
+                    topMargin: vpx(10)
                     left: parent.left
                     leftMargin: vpx(30)
                 }
                 width: vpx(562)
                 height: vpx(215)
-                source: "assets/window-console.png"
+                source: "assets/collections-window-console.png"
                 asynchronous: true
-                z: 1
+                visible: consoleGameImage.status === Image.Ready
+                Image {
+                    id: consoleGameImage
+                    anchors {
+                        top: parent.top
+                        topMargin: vpx(30)
+                        left: parent.left
+                        leftMargin: vpx(16)
+                    }
+                    width: vpx(530)
+                    height: vpx(166)
+                    fillMode: Image.PreserveAspectFit
+                    source: currentCollection.shortName ? "consolegame/%1.svg".arg(currentCollection.shortName) : ""
+                    asynchronous: true
+                }
             }
 
-            Image {
-                id: consoleGameImage
-                anchors {
-                    top: consoleGameWindow.top
-                    topMargin: vpx(30)
-                    left: consoleGameWindow.left 
-                    leftMargin: vpx(16)
-                }
-                width: vpx(530)
-                height: vpx(166)
-                fillMode: Image.PreserveAspectFit
-                source: model.shortName ? "consolegame/%1.svg".arg(model.shortName) : ""
-                asynchronous: true
-            }
 
             // controller
             Image {
                 id: controllerWindow
                 anchors {
-                    top: parent.top
-                    topMargin: vpx(30)
+                    top: titlebar.bottom
+                    topMargin: vpx(10)
                     left: consoleGameWindow.right
                     leftMargin: vpx(100)
                 }
                 width: vpx(319)
                 height: vpx(215)
-                source: "assets/window-controller.png"
+                source: "assets/collections-window-controller.png"
                 asynchronous: true
                 visible: controllerImage.status === Image.Ready
-                z: 1
-            }
-
-            Image {
-                id: controllerImage
-                anchors {
-                    top: controllerWindow.top
-                    topMargin: vpx(30)
-                    left: controllerWindow.left
-                    leftMargin: vpx(7)
+                Image {
+                    id: controllerImage
+                    anchors {
+                        top: parent.top
+                        topMargin: vpx(30)
+                        left: parent.left
+                        leftMargin: vpx(7)
+                    }
+                    width: vpx(305)
+                    height: vpx(175)
+                    fillMode: Image.PreserveAspectFit
+                    source: currentCollection.shortName ? "controller/%1.svg".arg(currentCollection.shortName) : ""
+                    asynchronous: true
                 }
-                width: vpx(305)
-                height: vpx(175)
-                fillMode: Image.PreserveAspectFit
-                source: model.shortName ? "controller/%1.svg".arg(model.shortName) : ""
-                asynchronous: true
             }
         }
     }
@@ -216,32 +239,16 @@ FocusScope {
             }
             height: vpx(208)
             width: parent.width
-            source: "assets/window-system.png"
+            source: "assets/collections-window-system.png"
+            asynchronous: true
         }
-    }
-
-    // Game count bar -- like above, I've put it in an Item to separately control opacity
-    Text {
-        id: gamecount
-        anchors {
-            left: parent.left
-            right: parent.right
-            top: parent.top
-            topMargin: vpx(2)
-        }
-        width: parent.width
-        text: "%1: %2 GAMES".arg(currentCollection.name).arg(currentCollection.games.count)
-        color: colorAmigaBlue
-        font.pixelSize: vpx(16)
-        font.family: amigaFont.name
-        horizontalAlignment: Text.alignHCenter
     }
 
     // Collection Info section
     Item {
         anchors {
             left: parent.left
-            leftMargin: vpx(420)
+            leftMargin: vpx(600)
             top: logoBar.bottom
             topMargin: vpx(30)
             bottom: footer.top
@@ -255,24 +262,27 @@ FocusScope {
             }
             width: vpx(526)
             height: vpx(205)
-            source: "assets/window-info.png"
+            source: "assets/collections-window-info.png"
             asynchronous: true
             z: 1
+            Text {
+                id: collectionInfoLabel
+                anchors.fill: parent
+                width: parent.width
+                height: parent.height
+                topPadding: vpx(30)
+                leftPadding: vpx(10)
+                rightPadding: vpx(30)
+                bottomPadding: vpx(30)
+                wrapMode: Text.Wrap
+                text: collectionInfo.info.join("\n")
+                color: "white"
+                font.pixelSize: vpx(14)
+                font.family: amigaFont.name
+                elide: Text.ElideRight
+            }
         }
 
-        Text {
-            id: collectionInfoLabel
-            anchors.centerIn: collectionInfoWindow
-            text: collectionInfo.info.join("\n")
-            color: "white"
-            font.pixelSize: vpx(14)
-            font.family: amigaFont.name
-            elide: Text.ElideRight
-            topPadding: vpx(30)
-            leftPadding: vpx(10)
-            rightPadding: vpx(30)
-            bottomPadding: vpx(30)
-        }
     }
 
     Rectangle {
