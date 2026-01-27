@@ -97,10 +97,6 @@ FocusScope {
         color: colorAmigaBlue
     }
 
-    //
-    // Header
-    //
-    // The header bar on the top, with the collection's consolegame and controller on left and logo on right
 
     Rectangle {
         id: header
@@ -113,49 +109,89 @@ FocusScope {
         color: "transparent"
         height: vpx(150)
 
+        // titlebar
         Image {
-            id: consoleGame
+            id: titlebar
             anchors {
                 top: parent.top
-                topMargin: root.padding * 2
                 left: parent.left
-                leftMargin: root.padding * 2
             }
-            height: vpx(100)
-            fillMode: Image.PreserveAspectFit
-            source: currentCollection.shortName ?
-                "consolegame/%1.svg".arg(currentCollection.shortName) : ""
+            width: parent.width
+            height: vpx(20)
+            source: "assets/titlebar.png"
             asynchronous: true
         }
 
-        Image {
-            id: controller
+        Rectangle {
             anchors {
-                top: parent.top
+                top: titlebar.bottom
                 topMargin: root.padding * 2
-                left: consoleGame.right
+                left: parent.left
                 leftMargin: root.padding
             }
             height: vpx(100)
-            fillMode: Image.PreserveAspectFit
-            source: currentCollection.shortName ?
-                "controller/%1.svg".arg(currentCollection.shortName) : ""
-            asynchronous: true
+            width: vpx(600)
+            color: "red"
+            Item {
+                // combined console and controller
+                height: parent.height
+                width: consoleGame.width + controller.width + root.padding
+                anchors.horizontalCenter: parent.horizontalCenter
+                Image {
+                    id: consoleGame
+                    anchors {
+                        top: parent.top
+                        topMargin: vpx(5)
+                        left: parent.left
+                    }
+                    height: vpx(90)
+                    fillMode: Image.PreserveAspectFit
+                    source: currentCollection.shortName ?
+                        "consolegame/%1.svg".arg(currentCollection.shortName) : ""
+                    asynchronous: true
+                }
+                Image {
+                    id: controller
+                    anchors {
+                        top: parent.top
+                        topMargin: vpx(5)
+                        left: consoleGame.right
+                        leftMargin: root.padding
+                    }
+                    height: vpx(90)
+                    fillMode: Image.PreserveAspectFit
+                    source: currentCollection.shortName ?
+                        "controller/%1.svg".arg(currentCollection.shortName) : ""
+                    asynchronous: true
+                }
+            }
         }
 
-        Image {
-            id: logo
+        Rectangle {
             anchors {
-                top: parent.top
+                top: titlebar.bottom
                 topMargin: root.padding * 2
                 right: parent.right
-                rightMargin: root.padding * 2
+                rightMargin: root.padding
             }
             height: vpx(100)
-            fillMode: Image.PreserveAspectFit
-            source: currentCollection.shortName ?
-                "logo/%1.svg".arg(currentCollection.shortName) : undefined
-            asynchronous: true
+            width: vpx(600)
+            color: "red"
+            Image {
+                id: logo
+                anchors {
+                    top: parent.top
+                    topMargin: vpx(5)
+                    right: parent.right
+                    centerIn: parent
+                }
+                height: vpx(90)
+                width: vpx(590)
+                fillMode: Image.PreserveAspectFit
+                source: currentCollection.shortName ?
+                    "logo/%1.svg".arg(currentCollection.shortName) : undefined
+                asynchronous: true
+            }
         }
     }
 
@@ -167,7 +203,7 @@ FocusScope {
         id: gameListBg
         anchors {
             top: header.bottom
-            topMargin: root.padding
+            topMargin: root.padding * 2
             left: parent.left
             leftMargin: root.padding
             bottom: footer.top
@@ -175,7 +211,7 @@ FocusScope {
         }
         width: parent.width * 0.35
         height: parent.height
-        color: "transparent"
+        color: "red"
         opacity: 0.95
 
 
@@ -183,6 +219,10 @@ FocusScope {
             id: gameList
             width: parent.width
             anchors.fill: parent
+            anchors {
+                topMargin: root.padding / 2
+                bottomMargin: root.padding / 2
+            }
             focus: true
 
             model: currentCollection.games
@@ -247,6 +287,7 @@ FocusScope {
         // art, details, description background
         anchors {
             top: header.bottom
+            topMargin: root.padding * 2
             left: gameListBg.right
             leftMargin: root.padding
             right: parent.right
@@ -255,21 +296,8 @@ FocusScope {
             bottomMargin: root.padding / 2
         }
 
-        color: "transparent"
+        color: "red"
         opacity: 0.95
-
-        RatingBar {
-            id: ratingBar
-
-            anchors {
-                left: parent.left
-                leftMargin: root.halfPadding
-                top: parent.top
-                topMargin: root.halfPadding
-            }
-
-            percentage: currentGame.rating
-        }
 
         Item {
             id: boxart
@@ -278,10 +306,10 @@ FocusScope {
             width: vpx(384)
 
             anchors {
-                top: ratingBar.bottom;
-                topMargin: root.padding
+                top: parent.top;
+                topMargin: root.padding / 2
                 left: parent.left;
-                leftMargin: root.padding
+                leftMargin: root.padding / 2
             }
 
             Image {
@@ -300,16 +328,29 @@ FocusScope {
             }
         }
 
+        RatingBar {
+            id: ratingBar
+
+            anchors {
+                top: parent.top
+                topMargin: root.padding
+                left: boxart.right
+                leftMargin: root.padding
+            }
+
+            percentage: currentGame.rating
+        }
+
         // While the game details could be a grid, I've separated them to two
         // separate columns to manually control the width of the second one below.
         Column {
             id: gameLabels
             anchors {
-                top: boxart.top
-                left: boxart.right;
+                top: ratingBar.bottom
+                topMargin: root.halfPadding
+                left: boxart.right
                 leftMargin: root.padding
             }
-
             GameInfoLabel { text: "Released:" }
             GameInfoLabel { text: "Developer:" }
             GameInfoLabel { text: "Publisher:" }
@@ -349,11 +390,12 @@ FocusScope {
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
+                bottomMargin: root.padding / 2
             }
             width: parent.contentWidth
             height: parent.contentHeight
             color: "transparent"
-            border.width: vpx(3)
+            border.width: vpx(1)
             border.color: descriptionScroll.activeFocus ? "white" : "transparent"
         }
 
@@ -371,6 +413,8 @@ FocusScope {
 
             Text {
                 id: gameDescription
+                topPadding: root.padding / 2
+                bottomPadding: root.padding / 2
                 leftPadding: root.padding
                 rightPadding: root.padding
                 text: currentGame.description

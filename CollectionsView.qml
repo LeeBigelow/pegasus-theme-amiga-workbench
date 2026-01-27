@@ -49,7 +49,7 @@ FocusScope {
         } else {
             detailsView.currentGameIndex = api.memory.get('gameIndex') || 0;
         }
-        //detailsView.focus = true;
+        detailsView.focus = true;
     }
 
 
@@ -81,9 +81,10 @@ FocusScope {
     }
 
     Component {
-        // background color, titlebar, windows and images
+        // delegate for bgAxis
         id: bgAxisItem
 
+        // background color, titlebar, cosole and controller images and windows 
         Item {
             anchors.fill: parent
             width: root.width
@@ -103,9 +104,11 @@ FocusScope {
                     top: parent.top
                     left: parent.left
                 }
-                width: parent.width
-                height: vpx(20)
-                source: "assets/collections-titlebar.png"
+                source: "assets/titlebar.png"
+                sourceSize.width: parent.width
+                sourceSize.height: vpx(20)
+                width: sourceSize.width
+                height: sourceSize.height
                 asynchronous: true
             }
 
@@ -117,90 +120,98 @@ FocusScope {
                 color: colorAmigaBlue
                 font.pixelSize: vpx(16)
                 font.family: amigaFont.name
-                horizontalAlignment: Text.alignHCenter
             }
 
-            // console + game
-            Image {
-                id: consoleGameWindow
+            Item {
+                // top third windows container
                 anchors {
                     top: titlebar.bottom
-                    topMargin: vpx(10)
                     left: parent.left
-                    leftMargin: vpx(30)
+                    right: parent.right 
                 }
-                width: vpx(562)
-                height: vpx(215)
-                source: "assets/collections-window-console.png"
-                asynchronous: true
-                visible: consoleGameImage.status === Image.Ready
+                height: ( parent.height - systemWindow.height - titlebar.height ) / 2
+
+                // console
                 Image {
-                    id: consoleGameImage
+                    id: consoleImage
                     anchors {
                         top: parent.top
-                        topMargin: vpx(30)
                         left: parent.left
-                        leftMargin: vpx(16)
+                        centerIn: consoleWindow
+                        verticalCenterOffset: vpx(5)
                     }
-                    width: vpx(530)
-                    height: vpx(166)
-                    fillMode: Image.PreserveAspectFit
                     source: currentCollection.shortName ? "consolegame/%1.svg".arg(currentCollection.shortName) : ""
+                    sourceSize.width: vpx(530)
+                    sourceSize.height: vpx(165)
+                    width: sourceSize.width
+                    height: sourceSize.height
+                    fillMode: Image.PreserveAspectFit
                     asynchronous: true
                 }
-            }
 
-
-            // controller
-            Image {
-                id: controllerWindow
-                anchors {
-                    top: titlebar.bottom
-                    topMargin: vpx(10)
-                    left: consoleGameWindow.right
-                    leftMargin: vpx(100)
+                Image {
+                    id: consoleWindow
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        centerIn: parent
+                        verticalCenterOffset: vpx(-7)
+                        horizontalCenterOffset: vpx( -320 )
+                    }
+                    source: "assets/collections-window-console.png"
+                    sourceSize.width: vpx(565)
+                    sourceSize.height: vpx(215)
+                    width: sourceSize.width
+                    height: sourceSize.height
+                    asynchronous: true
+                    visible: consoleImage.status === Image.Ready
                 }
-                width: vpx(319)
-                height: vpx(215)
-                source: "assets/collections-window-controller.png"
-                asynchronous: true
-                visible: controllerImage.status === Image.Ready
+
+
+                // controller
                 Image {
                     id: controllerImage
                     anchors {
                         top: parent.top
-                        topMargin: vpx(30)
                         left: parent.left
-                        leftMargin: vpx(7)
+                        centerIn: controllerWindow
+                        verticalCenterOffset: vpx(5)
                     }
-                    width: vpx(305)
-                    height: vpx(175)
-                    fillMode: Image.PreserveAspectFit
                     source: currentCollection.shortName ? "controller/%1.svg".arg(currentCollection.shortName) : ""
+                    sourceSize.width: vpx(305)
+                    sourceSize.height: vpx(175)
+                    width: sourceSize.width
+                    height: sourceSize.height
+                    fillMode: Image.PreserveAspectFit
                     asynchronous: true
                 }
-            }
-        }
-    }
 
-    // I've put the main bar's parts inside this wrapper item to change the opacity
-    // of the background separately from the carousel. You could also use a Rectangle
-    // with a color that has alpha value.
+                Image {
+                    id: controllerWindow
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        centerIn: parent
+                        verticalCenterOffset: vpx(-7)
+                        horizontalCenterOffset: vpx(200)
+                    }
+                    source: "assets/collections-window-controller.png"
+                    sourceSize.width: vpx(320)
+                    sourceSize.height: vpx(215)
+                    width: sourceSize.width
+                    height: sourceSize.height
+                    asynchronous: true
+                    visible: controllerImage.status === Image.Ready
+                }
+            } // Item top third windows end
+        } // Item for titlebar, gamecount, top windows end
+    } // Component bgAxisItem end
+
+    // system logo bar
     Item {
         id: logoBar
-        anchors {
-            left: parent.left
-            right: parent.right
-            verticalCenter: parent.verticalCenter
-        }
+        anchors.fill: parent
         height: vpx(170)
-
-        // Background
-        Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            opacity: 0.85
-        }
 
         // The main carousel that we actually control
         Carousel {
@@ -232,93 +243,97 @@ FocusScope {
         }
 
         Image {
+            id: systemWindow
             anchors {
                 left: parent.left
                 top: parent.top
-                topMargin: vpx(-20)
+                centerIn: parent
+                verticalCenterOffset: vpx(-5)
             }
-            height: vpx(208)
-            width: parent.width
             source: "assets/collections-window-system.png"
+            sourceSize.height: vpx(208)
+            sourceSize.width: parent.width
+            height: sourceSize.height
+            width: sourceSize.width
             asynchronous: true
         }
-    }
 
-    // Collection Info section
-    Item {
-        anchors {
-            left: parent.left
-            leftMargin: vpx(600)
-            top: logoBar.bottom
-            topMargin: vpx(30)
-            bottom: footer.top
-        }
-
-        Image {
-            id: collectionInfoWindow
+        // Collection Info section
+        Item {
+            // bottom third
             anchors {
-                top: parent.top
-                left: parent.left 
+                top: systemWindow.bottom
+                left: parent.left
+                right: parent.right
+                bottom: footer.top
             }
-            width: vpx(526)
-            height: vpx(205)
-            source: "assets/collections-window-info.png"
-            asynchronous: true
-            z: 1
-            Text {
-                id: collectionInfoLabel
-                anchors.fill: parent
-                width: parent.width
-                height: parent.height
-                topPadding: vpx(30)
-                leftPadding: vpx(10)
-                rightPadding: vpx(30)
-                bottomPadding: vpx(30)
-                wrapMode: Text.Wrap
-                text: collectionInfo.info.join("\n")
-                color: "white"
-                font.pixelSize: vpx(14)
-                font.family: amigaFont.name
-                elide: Text.ElideRight
-            }
-        }
 
+            Image {
+                id: collectionInfoWindow
+                anchors {
+                    top: parent.top
+                    left: parent.left 
+                    centerIn: parent
+                    horizontalCenterOffset: vpx(200)
+                }
+                source: "assets/collections-window-info.png"
+                width: vpx(525)
+                height: vpx(205)
+                asynchronous: true
+                Text {
+                    id: collectionInfoLabel
+                    anchors.fill: parent
+                    width: parent.width
+                    height: parent.height
+                    topPadding: vpx(30)
+                    leftPadding: vpx(15)
+                    rightPadding: vpx(30)
+                    bottomPadding: vpx(30)
+                    wrapMode: Text.Wrap
+                    text: collectionInfo.info.join("\n")
+                    color: "white"
+                    font.pixelSize: vpx(14)
+                    font.family: amigaFont.name
+                    elide: Text.ElideRight
+                }
+            } // collectionInfoWindow end
+        } // bottom third end
+
+        Item {
+            id: footer
+            anchors {
+                bottom: parent.bottom
+                left: parent.left
+                leftMargin: root.padding
+                right: parent.right
+                rightMargin: root.padding
+            }
+            height: vpx(40)
+
+            FooterImage {
+                id: leftRightButton
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+                imageSource: "assets/dpad_leftright.svg"
+                imageLabel: "Collection Switch"
+            }
+
+            FooterImage {
+                id: bButton
+                anchors.left: leftRightButton.right
+                anchors.bottom: parent.bottom
+                imageSource: "assets/button_b.svg"
+                imageLabel: "Select"
+            }
+
+            FooterImage {
+                id: startButton
+                anchors.left: bButton.right
+                anchors.bottom: parent.bottom
+                imageSource: "assets/button_start.svg"
+                imageLabel: "Settings"
+            }
+        } // footer end
     }
 
-    Rectangle {
-        id: footer
-        anchors {
-            bottom: parent.bottom
-            left: parent.left
-            leftMargin: root.padding
-            right: parent.right
-            rightMargin: root.padding
-        }
-        height: vpx(40)
-        color: "transparent"
-
-        FooterImage {
-            id: leftRightButton
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
-            imageSource: "assets/dpad_leftright.svg"
-            imageLabel: "Collection Switch"
-        }
-
-        FooterImage {
-            id: bButton
-            anchors.left: leftRightButton.right
-            anchors.bottom: parent.bottom
-            imageSource: "assets/button_b.svg"
-            imageLabel: "Select"
-        }
-
-        FooterImage {
-            id: startButton
-            anchors.left: bButton.right
-            anchors.bottom: parent.bottom
-            imageSource: "assets/button_start.svg"
-            imageLabel: "Settings"
-        }
-    }
 }
