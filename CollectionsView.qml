@@ -203,9 +203,9 @@ FocusScope {
                     asynchronous: true
                     visible: controllerImage.status === Image.Ready
                 }
-            } // Item top third windows end
-        } // Item for titlebar, gamecount, top windows end
-    } // Component bgAxisItem end
+            } // end container top third windows
+        } // end container for titlebar, gamecount, top windows
+    } // end Component bgAxisItem
 
     // system logo bar
     Item {
@@ -296,8 +296,8 @@ FocusScope {
                     font.family: amigaFont.name
                     elide: Text.ElideRight
                 }
-            } // collectionInfoWindow end
-        } // bottom third end
+            } // end collectionInfoWindow
+        } // end bottom third container
 
         Item {
             id: footer
@@ -308,7 +308,7 @@ FocusScope {
                 right: parent.right
                 rightMargin: root.padding
             }
-            height: vpx(40)
+            height: vpx(30)
 
             FooterImage {
                 id: leftRightButton
@@ -333,7 +333,7 @@ FocusScope {
                 imageSource: "assets/button_start.svg"
                 imageLabel: "Settings"
             }
-        } // footer end
+        } // end footer
     }
 
 }

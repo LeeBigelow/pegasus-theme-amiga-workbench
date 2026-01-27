@@ -12,10 +12,10 @@ Item {
         id: image
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        height: vpx(30)
 
         source: imageSource
-        sourceSize { width: vpx(40); height: vpx(40) }
+        sourceSize.height: vpx(20) 
+        height: sourceSize.height
         fillMode: Image.PreserveAspectFit
         asynchronous: true
     }
@@ -27,7 +27,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         color: "white"
         font.family: amigaFont.name
-        font.pixelSize: vpx(18)
+        font.pixelSize: vpx(16)
         text: imageLabel
     }
 }

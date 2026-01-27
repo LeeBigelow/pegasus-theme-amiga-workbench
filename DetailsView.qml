@@ -98,7 +98,8 @@ FocusScope {
     }
 
 
-    Rectangle {
+    Item {
+        // top header for titlebar, console and logo windows
         id: header
         anchors {
             top: parent.top
@@ -106,8 +107,7 @@ FocusScope {
             left: parent.left
         }
 
-        color: "transparent"
-        height: vpx(150)
+        height: vpx(180)
 
         // titlebar
         Image {
@@ -116,13 +116,17 @@ FocusScope {
                 top: parent.top
                 left: parent.left
             }
-            width: parent.width
-            height: vpx(20)
             source: "assets/titlebar.png"
+            sourceSize.width: parent.width
+            sourceSize.height: vpx(20)
+            width: sourceSize.width
+            height: sourceSize.height
             asynchronous: true
         }
 
-        Rectangle {
+        Item {
+            // containter for console+controller image and window
+            id: consoleController
             anchors {
                 top: titlebar.bottom
                 topMargin: root.padding * 2
@@ -131,9 +135,8 @@ FocusScope {
             }
             height: vpx(100)
             width: vpx(600)
-            color: "red"
             Item {
-                // combined console and controller
+                // console+controller inner images
                 height: parent.height
                 width: consoleGame.width + controller.width + root.padding
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -144,10 +147,11 @@ FocusScope {
                         topMargin: vpx(5)
                         left: parent.left
                     }
-                    height: vpx(90)
                     fillMode: Image.PreserveAspectFit
                     source: currentCollection.shortName ?
                         "consolegame/%1.svg".arg(currentCollection.shortName) : ""
+                    sourceSize.height: vpx(90)
+                    height: sourceSize.height
                     asynchronous: true
                 }
                 Image {
@@ -158,16 +162,33 @@ FocusScope {
                         left: consoleGame.right
                         leftMargin: root.padding
                     }
-                    height: vpx(90)
                     fillMode: Image.PreserveAspectFit
                     source: currentCollection.shortName ?
                         "controller/%1.svg".arg(currentCollection.shortName) : ""
+                    sourceSize.height: vpx(90)
+                    height: sourceSize.height
                     asynchronous: true
                 }
-            }
-        }
+            } // console+controller inner images
 
-        Rectangle {
+            Image {
+                id: consoleControllerWindow
+                anchors {
+                    top: parent.top
+                    topMargin: vpx(-20)
+                    left: parent.left
+                    leftMargin: vpx(-2)
+                }
+                source: "assets/details-window-console.png"
+                sourceSize.width: parent.width + vpx(4)
+                sourceSize.height: parent.height + vpx(22)
+                width: sourceSize.width 
+                height: sourceSize.height
+            }
+        } // end containter for console+controller image and window
+
+        Item {
+            // system logo and window containter
             anchors {
                 top: titlebar.bottom
                 topMargin: root.padding * 2
@@ -176,7 +197,7 @@ FocusScope {
             }
             height: vpx(100)
             width: vpx(600)
-            color: "red"
+
             Image {
                 id: logo
                 anchors {
@@ -185,25 +206,42 @@ FocusScope {
                     right: parent.right
                     centerIn: parent
                 }
-                height: vpx(90)
-                width: vpx(590)
                 fillMode: Image.PreserveAspectFit
                 source: currentCollection.shortName ?
                     "logo/%1.svg".arg(currentCollection.shortName) : undefined
+                sourceSize.width: vpx(590)
+                sourceSize.height: vpx(90)
+                width: sourceSize.width
+                height: sourceSize.height
                 asynchronous: true
             }
-        }
-    }
+
+            Image {
+                id: logoWindow
+                anchors {
+                    top: parent.top
+                    topMargin: vpx(-20)
+                    left: parent.left
+                    leftMargin: vpx(-2)
+                }
+                source: "assets/details-window-system.png"
+                sourceSize.width: parent.width + vpx(4)
+                sourceSize.height: parent.height + vpx(22)
+                width: sourceSize.width
+                height: sourceSize.height
+            }
+        } // end logo and window containter
+    } // end top header for titlebar, console and logo windows
 
     //
     // Main content
     //
-    Rectangle {
-        // gamelist background
+    Item {
+        // gamelist and window containter
         id: gameListBg
         anchors {
             top: header.bottom
-            topMargin: root.padding * 2
+            topMargin: root.padding 
             left: parent.left
             leftMargin: root.padding
             bottom: footer.top
@@ -211,7 +249,6 @@ FocusScope {
         }
         width: parent.width * 0.35
         height: parent.height
-        color: "red"
         opacity: 0.95
 
 
@@ -221,48 +258,51 @@ FocusScope {
             anchors.fill: parent
             anchors {
                 topMargin: root.padding / 2
+                rightMargin: root.padding / 2
                 bottomMargin: root.padding / 2
             }
             focus: true
 
             model: currentCollection.games
 
-            delegate: Rectangle {
-                readonly property bool selected: ListView.isCurrentItem
+            delegate: 
+                Rectangle {
+                    // rectangle for each gameList item
+                    readonly property bool selected: ListView.isCurrentItem
 
-                width: ListView.view.width
-                height: gameTitle.height
-                color:
-                    if (selected) {
-                        gameList.activeFocus ? "white" : colorAmigaBlue;
-                    } else {
-                        return "transparent";
-                    }
-
-                Text {
-                    id: gameTitle
-                    text: (modelData.favorite ? "★" : "") + " " + modelData.title
+                    width: ListView.view.width
+                    height: gameTitle.height
                     color:
                         if (selected) {
-                            gameList.activeFocus ? colorAmigaBlue : "black";
+                            gameList.activeFocus ? "white" : colorAmigaBlue;
                         } else {
-                            return "white";
+                            return "transparent";
                         }
 
-                    font.pixelSize: vpx(20)
-                    font.capitalization: Font.AllUppercase
-                    font.family: amigaFont.name
-                    font.weight: Font.DemiBold
+                    Text {
+                        id: gameTitle
+                        text: (modelData.favorite ? "♥" : " ") + " " + modelData.title
+                        color:
+                            if (selected) {
+                                gameList.activeFocus ? colorAmigaBlue : "black";
+                            } else {
+                                return "white";
+                            }
 
-                    lineHeight: 1.2
-                    verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: vpx(20)
+                        font.capitalization: Font.AllUppercase
+                        font.family: amigaFont.name
+                        font.weight: Font.DemiBold
 
-                    width: parent.width
-                    elide: Text.ElideRight
-                    leftPadding: vpx(10)
-                    rightPadding: leftPadding
+                        lineHeight: 1.2
+                        verticalAlignment: Text.AlignVCenter
+
+                        width: parent.width
+                        elide: Text.ElideRight
+                        leftPadding: vpx(5)
+                        rightPadding: vpx(10)
+                    }
                 }
-            }
 
             clip: true
             highlightMoveDuration: 0
@@ -280,51 +320,68 @@ FocusScope {
                     descriptionScroll.forceActiveFocus();
                     return;
                 }
-        }
-    }
+        } // end gameList ListView
 
-    Rectangle {
-        // art, details, description background
+        Image {
+            // gameListWindow
+            id: gameListWindow
+            anchors {
+                top: parent.top
+                topMargin: vpx(-20)
+                left: parent.left
+                leftMargin: vpx(-2)
+            }
+            source: gameList.activeFocus ? 
+                "assets/details-window-games-focused.png" :
+                "assets/details-window-games-unfocused.png" 
+            sourceSize.width: parent.width + vpx(4)
+            sourceSize.height: parent.height + vpx(22)
+            width: sourceSize.width
+            height: sourceSize.height
+        }
+    } // end gamelist and window container
+
+    Item {
+        // art, details, description and window container
         anchors {
             top: header.bottom
-            topMargin: root.padding * 2
+            topMargin: root.padding
             left: gameListBg.right
-            leftMargin: root.padding
+            leftMargin: root.padding * 2
             right: parent.right
             rightMargin: root.padding
             bottom: footer.top
             bottomMargin: root.padding / 2
         }
 
-        color: "red"
         opacity: 0.95
 
         Item {
+            // need container to control boxart size
             id: boxart
-
-            height: vpx(288)
-            width: vpx(384)
-
             anchors {
                 top: parent.top;
                 topMargin: root.padding / 2
                 left: parent.left;
                 leftMargin: root.padding / 2
             }
+            width: vpx(384)
+            height: vpx(288)
 
             Image {
                 id: boxartImage
 
                 anchors.fill: parent
                 anchors.centerIn: parent
+                fillMode: Image.PreserveAspectFit
                 asynchronous: true
                 // skyscraper screenshoot is nice mixed image 3:4 ratio
                 source: currentGame.assets.screenshot ||
                         currentGame.assets.boxFront ||
                         currentGame.assets.logo ||
                         currentGame.assets.marquee
-                sourceSize { width: vpx(400); height: vpx(400) } // optimization (max size)
-                fillMode: Image.PreserveAspectFit
+                sourceSize.width: parent.width
+                sourceSize.height: parent.height 
             }
         }
 
@@ -365,7 +422,7 @@ FocusScope {
             anchors {
                 top: gameLabels.top
                 left: gameLabels.right
-                leftMargin: root.padding
+                leftMargin: root.padding / 2
                 right: parent.right
                 rightMargin: root.padding
             }
@@ -383,7 +440,7 @@ FocusScope {
         }
 
         Rectangle {
-            id: descriptionBg
+            // wrap description in rectangle for border on focus
             anchors {
                 top: boxart.bottom
                 topMargin: root.padding / 2
@@ -397,64 +454,81 @@ FocusScope {
             color: "transparent"
             border.width: vpx(1)
             border.color: descriptionScroll.activeFocus ? "white" : "transparent"
-        }
 
-        Flickable {
-            id: descriptionScroll
+            Flickable {
+                id: descriptionScroll
+                anchors {
+                    fill: parent
+                }
+                clip: true
+                focus: true
+                onFocusChanged: { contentY = 0; }
+                contentWidth: parent.width
+                contentHeight: gameDescription.height
+                flickableDirection: Flickable.VerticalFlick
+
+                Text {
+                    id: gameDescription
+                    topPadding: root.padding / 2
+                    bottomPadding: root.padding / 2
+                    leftPadding: root.padding
+                    rightPadding: root.padding
+                    text: currentGame.description
+                    wrapMode: Text.WordWrap
+                    width: descriptionScroll.width
+                    //elide: Text.ElideRight
+                    font.pixelSize: vpx(16)
+                    font.family: amigaFont.name
+                    font.weight: Font.DemiBold
+                    color: "white"
+                }
+
+                // Keybindings for descriptionScroll
+                // scroll description on up and down
+                Keys.onUpPressed:
+                    if ((contentY - 10) < 0) {
+                        contentY = 0;
+                    } else {
+                        contentY -= 10;
+                    }
+                Keys.onDownPressed:
+                    if ((contentY + 10) > (gameDescription.height - height)) {
+                        contentY = gameDescription.height - height;
+                    } else {
+                        contentY += 10;
+                    }
+                // Toggle focus on tab and details key (i)
+                KeyNavigation.tab: gameList
+                Keys.onPressed:
+                    if (event.isAutoRepeat) {
+                        return;
+                    } else if (api.keys.isDetails(event)) {
+                        event.accepted = true;
+                        gameList.forceActiveFocus();
+                        return;
+                    }
+            } // end descriptionScroll
+        } // end description container
+
+        Image {
+            // details window
             anchors {
-                fill: descriptionBg
+                top: parent.top
+                topMargin: vpx(-20)
+                left: parent.left
+                leftMargin: vpx(-2)
             }
-            clip: true
-            focus: true
-            onFocusChanged: { contentY = 0; }
-            contentWidth: descriptionBg.width
-            contentHeight: gameDescription.height
-            flickableDirection: Flickable.VerticalFlick
-
-            Text {
-                id: gameDescription
-                topPadding: root.padding / 2
-                bottomPadding: root.padding / 2
-                leftPadding: root.padding
-                rightPadding: root.padding
-                text: currentGame.description
-                wrapMode: Text.WordWrap
-                width: descriptionScroll.width
-                //elide: Text.ElideRight
-                font.pixelSize: vpx(16)
-                font.family: amigaFont.name
-                font.weight: Font.DemiBold
-                color: "white"
-            }
-
-            // Keybindings for descriptionScroll
-            // scroll description on up and down
-            Keys.onUpPressed:
-                if ((contentY - 10) < 0) {
-                    contentY = 0;
-                } else {
-                    contentY -= 10;
-                }
-            Keys.onDownPressed:
-                if ((contentY + 10) > (gameDescription.height - height)) {
-                    contentY = gameDescription.height - height;
-                } else {
-                    contentY += 10;
-                }
-            // Toggle focus on tab and details key (i)
-            KeyNavigation.tab: gameList
-            Keys.onPressed:
-                if (event.isAutoRepeat) {
-                    return;
-                } else if (api.keys.isDetails(event)) {
-                    event.accepted = true;
-                    gameList.forceActiveFocus();
-                    return;
-                }
+            source: descriptionScroll.activeFocus ? 
+                "assets/details-window-details-focused.png" :
+                "assets/details-window-details-unfocused.png"
+            sourceSize.width: parent.width + vpx(4)
+            sourceSize.height: parent.height + vpx(22)
+            width: sourceSize.width
+            height: sourceSize.height
         }
-    }
+    } // end art, details, description and window container
 
-    Rectangle {
+    Item {
         id: footer
         anchors {
             bottom: parent.bottom
@@ -463,8 +537,7 @@ FocusScope {
             right: parent.right
             rightMargin: root.padding
         }
-        height: vpx(40)
-        color: "transparent"
+        height: vpx(30)
 
         FooterImage {
             id: leftRightButton
