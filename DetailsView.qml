@@ -124,6 +124,17 @@ FocusScope {
             asynchronous: true
         }
 
+        // Game count in titlebar
+        Text {
+            id: gamecount
+            anchors.centerIn: titlebar
+            text: "%1: %2 GAMES".arg(currentCollection.shortName).arg(currentCollection.games.count)
+            color: colorAmigaBlue
+            font.pixelSize: vpx(16)
+            font.family: amigaFont.name
+        }
+
+
         Item {
             // containter for console+controller image and window
             id: consoleController
