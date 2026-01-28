@@ -192,7 +192,7 @@ FocusScope {
                 source: "assets/details-window-console.png"
                 sourceSize.width: parent.width + vpx(4)
                 sourceSize.height: parent.height + vpx(22)
-                width: sourceSize.width 
+                width: sourceSize.width
                 height: sourceSize.height
             }
         } // end containter for console+controller image and window
@@ -251,7 +251,7 @@ FocusScope {
         id: gameListBg
         anchors {
             top: header.bottom
-            topMargin: root.padding 
+            topMargin: root.padding
             left: parent.left
             leftMargin: root.padding
             bottom: footer.top
@@ -275,7 +275,7 @@ FocusScope {
 
             model: currentCollection.games
 
-            delegate: 
+            delegate:
                 Rectangle {
                     // rectangle for each gameList item
                     readonly property bool selected: ListView.isCurrentItem
@@ -341,9 +341,9 @@ FocusScope {
                 left: parent.left
                 leftMargin: vpx(-2)
             }
-            source: gameList.activeFocus ? 
+            source: gameList.activeFocus ?
                 "assets/details-window-games-focused.png" :
-                "assets/details-window-games-unfocused.png" 
+                "assets/details-window-games-unfocused.png"
             sourceSize.width: parent.width + vpx(4)
             sourceSize.height: parent.height + vpx(22)
             width: sourceSize.width
@@ -390,8 +390,10 @@ FocusScope {
                         currentGame.assets.boxFront ||
                         currentGame.assets.logo ||
                         currentGame.assets.marquee
-                sourceSize.width: parent.width
-                sourceSize.height: parent.height 
+                sourceSize.width: vpx(384)
+                sourceSize.height: vpx(288)
+                width: sourceSize.width
+                height: sourceSize.height
             }
         }
 
@@ -528,7 +530,7 @@ FocusScope {
                 left: parent.left
                 leftMargin: vpx(-2)
             }
-            source: descriptionScroll.activeFocus ? 
+            source: descriptionScroll.activeFocus ?
                 "assets/details-window-details-focused.png" :
                 "assets/details-window-details-unfocused.png"
             sourceSize.width: parent.width + vpx(4)

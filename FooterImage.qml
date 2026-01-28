@@ -14,7 +14,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
 
         source: imageSource
-        sourceSize.height: vpx(20) 
+        sourceSize.height: vpx(20)
         height: sourceSize.height
         fillMode: Image.PreserveAspectFit
         asynchronous: true

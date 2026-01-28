@@ -84,7 +84,7 @@ FocusScope {
         // delegate for bgAxis
         id: bgAxisItem
 
-        // background color, titlebar, cosole and controller images and windows 
+        // background color, titlebar, cosole and controller images and windows
         Item {
             anchors.fill: parent
             width: root.width
@@ -122,7 +122,7 @@ FocusScope {
                     rightMargin: root.padding
                 }
                 source: "assets/ramdiskicon.png"
-                sourceSize.width: vpx(96) 
+                sourceSize.width: vpx(96)
                 sourceSize.height: vpx(46)
                 width: sourceSize.width
                 height: sourceSize.height
@@ -139,7 +139,7 @@ FocusScope {
                     rightMargin: root.padding
                 }
                 source: "assets/workbenchicon.png"
-                sourceSize.width: vpx(96) 
+                sourceSize.width: vpx(96)
                 sourceSize.height: vpx(46)
                 width: sourceSize.width
                 height: sourceSize.height
@@ -148,14 +148,14 @@ FocusScope {
 
             // cursor image
             Image {
-                id: cursorImage 
+                id: cursorImage
                 anchors {
                     top: workbenchIcon.bottom
                     right: parent.right
                     rightMargin: root.padding
                 }
                 source: "assets/cursor.png"
-                sourceSize.width: vpx(24) 
+                sourceSize.width: vpx(24)
                 sourceSize.height: vpx(23)
                 width: sourceSize.width
                 height: sourceSize.height
@@ -177,7 +177,7 @@ FocusScope {
                 anchors {
                     top: titlebar.bottom
                     left: parent.left
-                    right: parent.right 
+                    right: parent.right
                 }
                 height: ( parent.height - systemWindow.height - titlebar.height ) / 2
 
@@ -322,7 +322,7 @@ FocusScope {
                 id: collectionInfoWindow
                 anchors {
                     top: parent.top
-                    left: parent.left 
+                    left: parent.left
                     centerIn: parent
                     horizontalCenterOffset: vpx(200)
                 }
