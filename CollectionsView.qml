@@ -146,6 +146,22 @@ FocusScope {
                 asynchronous: true
             }
 
+            // cursor image
+            Image {
+                id: cursorImage 
+                anchors {
+                    top: workbenchIcon.bottom
+                    right: parent.right
+                    rightMargin: root.padding
+                }
+                source: "assets/cursor.png"
+                sourceSize.width: vpx(24) 
+                sourceSize.height: vpx(23)
+                width: sourceSize.width
+                height: sourceSize.height
+                asynchronous: true
+            }
+
             // Game count in titlebar
             Text {
                 id: gamecount
