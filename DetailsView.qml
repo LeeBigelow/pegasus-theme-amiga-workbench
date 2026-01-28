@@ -28,7 +28,6 @@ FocusScope {
     }
 
     readonly property int padding: vpx(20)
-    readonly property int halfPadding: vpx(10)
     readonly property int detailsTextHeight: vpx(30)
 
     // Nothing particularly interesting, see CollectionsView for more comments
@@ -415,7 +414,7 @@ FocusScope {
             id: gameLabels
             anchors {
                 top: ratingBar.bottom
-                topMargin: root.halfPadding
+                topMargin: root.padding / 2
                 left: boxart.right
                 leftMargin: root.padding
             }
