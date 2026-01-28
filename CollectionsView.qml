@@ -112,6 +112,40 @@ FocusScope {
                 asynchronous: true
             }
 
+            // ramdisk icon
+            Image {
+                id: ramdiskIcon
+                anchors {
+                    top: titlebar.bottom
+                    topMargin: root.padding
+                    right: parent.right
+                    rightMargin: root.padding
+                }
+                source: "assets/ramdiskicon.png"
+                sourceSize.width: vpx(96) 
+                sourceSize.height: vpx(46)
+                width: sourceSize.width
+                height: sourceSize.height
+                asynchronous: true
+            }
+
+            // workbench icon
+            Image {
+                id: workbenchIcon
+                anchors {
+                    top: ramdiskIcon.bottom
+                    topMargin: root.padding
+                    right: parent.right
+                    rightMargin: root.padding
+                }
+                source: "assets/workbenchicon.png"
+                sourceSize.width: vpx(96) 
+                sourceSize.height: vpx(46)
+                width: sourceSize.width
+                height: sourceSize.height
+                asynchronous: true
+            }
+
             // Game count in titlebar
             Text {
                 id: gamecount
