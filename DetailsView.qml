@@ -375,8 +375,8 @@ FocusScope {
                 left: parent.left;
                 leftMargin: root.padding / 2
             }
-            width: boxartImage.status === Image.Ready ? vpx(384) : 0
-            height: vpx(288)
+            width: boxartImage.status === Image.Ready ? vpx(333) : 0
+            height: vpx(250)
 
             Image {
                 id: boxartImage
@@ -390,8 +390,8 @@ FocusScope {
                         currentGame.assets.boxFront ||
                         currentGame.assets.logo ||
                         currentGame.assets.marquee
-                sourceSize.width: vpx(384)
-                sourceSize.height: vpx(288)
+                sourceSize.width: vpx(333)
+                sourceSize.height: vpx(250)
                 width: sourceSize.width
                 height: sourceSize.height
             }
@@ -455,11 +455,10 @@ FocusScope {
             // wrap description in rectangle for border on focus
             anchors {
                 top: boxart.bottom
-                topMargin: root.padding / 2
                 left: parent.left
                 right: parent.right
+                rightMargin: vpx(14)
                 bottom: parent.bottom
-                bottomMargin: root.padding / 2
             }
             width: parent.contentWidth
             height: parent.contentHeight
@@ -471,6 +470,10 @@ FocusScope {
                 id: descriptionScroll
                 anchors {
                     fill: parent
+                    topMargin: root.padding / 2
+                    bottomMargin: root.padding / 2
+                    leftMargin: root.padding / 2
+                    rightMargin: root.padding / 2
                 }
                 clip: true
                 focus: true
@@ -481,14 +484,9 @@ FocusScope {
 
                 Text {
                     id: gameDescription
-                    topPadding: root.padding / 2
-                    bottomPadding: root.padding / 2
-                    leftPadding: root.padding
-                    rightPadding: root.padding
                     text: currentGame.description
                     wrapMode: Text.WordWrap
                     width: descriptionScroll.width
-                    //elide: Text.ElideRight
                     font.pixelSize: vpx(16)
                     font.family: amigaFont.name
                     font.weight: Font.DemiBold
