@@ -376,7 +376,7 @@ FocusScope {
                 left: parent.left;
                 leftMargin: root.padding / 2
             }
-            width: vpx(384)
+            width: boxartImage.status === Image.Ready ? vpx(384) : 0
             height: vpx(288)
 
             Image {
