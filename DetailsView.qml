@@ -304,7 +304,11 @@ FocusScope {
                         font.family: amigaFont.name
                         font.weight: Font.DemiBold
 
-                        lineHeight: 1.2
+                        // set nice fixed height for amiga font
+                        // some utf8 chars in game titles will cause line
+                        // to not center vertically
+                        lineHeightMode: Text.FixedHeight
+                        lineHeight: vpx(30)
                         verticalAlignment: Text.AlignVCenter
 
                         width: parent.width
@@ -472,8 +476,8 @@ FocusScope {
                     fill: parent
                     topMargin: root.padding / 2
                     bottomMargin: root.padding / 2
-                    leftMargin: root.padding / 2
-                    rightMargin: root.padding / 2
+                    leftMargin: root.padding
+                    rightMargin: root.padding
                 }
                 clip: true
                 focus: true
@@ -487,7 +491,11 @@ FocusScope {
                     text: currentGame.description
                     wrapMode: Text.WordWrap
                     width: descriptionScroll.width
+                    horizontalAlignment: Text.AlignJustify
                     font.pixelSize: vpx(16)
+                    // set fixed line height or amiga topaz font behaves badly
+                    lineHeightMode: Text.FixedHeight
+                    lineHeight: vpx(20)
                     font.family: amigaFont.name
                     font.weight: Font.DemiBold
                     color: "white"

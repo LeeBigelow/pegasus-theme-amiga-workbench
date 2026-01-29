@@ -335,14 +335,16 @@ FocusScope {
                     anchors.fill: parent
                     width: parent.width
                     height: parent.height
-                    topPadding: vpx(30)
+                    topPadding: vpx(25)
                     leftPadding: vpx(15)
-                    rightPadding: vpx(30)
-                    bottomPadding: vpx(30)
+                    rightPadding: vpx(23)
+                    bottomPadding: vpx(23)
                     wrapMode: Text.Wrap
                     text: collectionInfo.info.join("\n")
                     color: "white"
-                    font.pixelSize: vpx(14)
+                    font.pixelSize: vpx(12)
+                    lineHeightMode: Text.FixedHeight
+                    lineHeight: vpx(15)
                     font.family: amigaFont.name
                     elide: Text.ElideRight
                 }

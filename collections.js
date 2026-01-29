@@ -1295,14 +1295,14 @@ var COLLECTIONS = {
             "BF2E31"
         ],
         "info": [
-            "Kodi (formerly XBMC) is a free and open source media player application developed",
-            "by the XBMC/Kodi Foundation, a non-profit technology consortium. Kodi is available for",
-            "multiple operating-systems and hardware platforms, featuring a 10-foot user interface",
-            "for use with televisions and remote controls.",
-            "It allows users to play and view most videos, music, podcasts, and other digital media",
-            "from local and network storage media and the internet.",
-            "Kodi has a gigantic catalog of community add-ons available for you to customize",
-            "and tweak your perfect entertainment setup."
+            "Kodi (formerly XBMC) is a free and open source media player application",
+            "developed by the XBMC/Kodi Foundation, a non-profit technology consortium.",
+            "Kodi is available for multiple operating-systems and hardware platforms,",
+            "featuring a 10-foot user interface for use with televisions and remote",
+            "controls.  It allows users to play and view most videos, music, podcasts,",
+            "and other digital media from local and network storage media and the",
+            "internet.  Kodi has a gigantic catalog of community add-ons available for",
+            "you to customize and tweak your perfect entertainment setup."
         ]
     },
     "laserdisc": {
