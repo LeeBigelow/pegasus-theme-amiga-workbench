@@ -196,7 +196,6 @@ FocusScope {
                     width: sourceSize.width
                     height: sourceSize.height
                     fillMode: Image.PreserveAspectFit
-                    asynchronous: true
                 }
 
                 Image {
@@ -213,7 +212,6 @@ FocusScope {
                     sourceSize.height: vpx(215)
                     width: sourceSize.width
                     height: sourceSize.height
-                    asynchronous: true
                     visible: consoleImage.status === Image.Ready
                 }
 
@@ -233,7 +231,6 @@ FocusScope {
                     width: sourceSize.width
                     height: sourceSize.height
                     fillMode: Image.PreserveAspectFit
-                    asynchronous: true
                 }
 
                 Image {
@@ -250,7 +247,6 @@ FocusScope {
                     sourceSize.height: vpx(215)
                     width: sourceSize.width
                     height: sourceSize.height
-                    asynchronous: true
                     visible: controllerImage.status === Image.Ready
                 }
             } // end container top third windows
