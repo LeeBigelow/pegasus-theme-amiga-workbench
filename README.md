@@ -1,7 +1,7 @@
 ![](screenshot.png)
 ![](screenshot1.png)
 
-# Amiga Workbench theme for Pegasus
+# Amiga Workbench theme for [Pegasus Frontend](https://pegasus-frontend.org/)
 
 * Features: Favorites, Last Played, scrollable game description.
 * Based on the [Amiga Workbench EmulationStation Theme](https://github.com/ehettervik/es-theme-workbench) as discussed on the [retropie forum](https://retropie.org.uk/forum/topic/5552/release-amiga-workbench-emulationstation-theme) back in 2016.
