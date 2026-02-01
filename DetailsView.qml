@@ -375,7 +375,7 @@ FocusScope {
         anchors {
             top: gameListContainer.bottom
             topMargin: vpx(5)
-            bottom: footer.top 
+            bottom: footer.top
             bottomMargin: root.padding / 2
             left: parent.left
             leftMargin: root.padding
@@ -430,6 +430,10 @@ FocusScope {
                 Keys.onDownPressed: {
                     if (currentGameIndex < gameList.count - 1) currentGameIndex++;
                     gameList.forceActiveFocus();
+                }
+                Keys.onPressed: {
+                    // keep game index on last item or details don't refresh?
+                    currentGameIndex = gameList.count - 1;
                 }
             }
         }
