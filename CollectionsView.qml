@@ -27,6 +27,7 @@ FocusScope {
     property var extendedCollections
     property var lastPlayedCollection
     property var favoritesCollection
+    property var allGamesCollection
     property color colorAmigaBlue
 
     readonly property int padding: vpx(20)
@@ -36,6 +37,7 @@ FocusScope {
         for (var i = 0; i < api.collections.count; i++) {
             extendedCollections.append(api.collections.get(i));
         }
+        extendedCollections.append(allGamesCollection);
         extendedCollections.append(lastPlayedCollection);
         extendedCollections.append(favoritesCollection);
         // only attach model after it's filled

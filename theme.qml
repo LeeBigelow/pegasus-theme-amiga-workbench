@@ -5,8 +5,6 @@ FocusScope {
 
     // Loading the fonts here makes them usable in the rest of the theme
     // and can be referred to using their name and weight.
-    FontLoader { source: "fonts/OPENSANS.TTF" }
-    FontLoader { source: "fonts/OPENSANS-LIGHT.TTF" }
     FontLoader {
         id: amigaFont
         source: "fonts/topaz_unicode_ks13_regular.ttf"
@@ -21,6 +19,12 @@ FocusScope {
 
     // a empty collections model we can add to
     ListModel { id: extendedCollections }
+    // all games
+    ListModel { id: allGamesCollection
+        readonly property var name: "All Games"
+        readonly property var shortName: "auto-allgames"
+        readonly property var games: api.allGames
+    }
     // the auto-filled collections defined in seperate files
     FavoritesCollection { id: favoritesCollection }
     LastPlayedCollection { id: lastPlayedCollection }
@@ -35,6 +39,7 @@ FocusScope {
         extendedCollections: extendedCollections
         favoritesCollection: favoritesCollection
         lastPlayedCollection: lastPlayedCollection
+        allGamesCollection: allGamesCollection
 
         colorAmigaBlue: root.colorAmigaBlue
 
@@ -53,18 +58,25 @@ FocusScope {
         colorAmigaBlue: root.colorAmigaBlue
         colorAmigaOrange: root.colorAmigaOrange
 
-        onCancel: collectionsView.focus = true
+        onCancel: {
+            filterText="";
+            collectionsView.focus = true
+        }
         onNextCollection: {
+            gameList.forceActiveFocus();
+            filterText="";
+            currentGameIndex=0;
             collectionsView.selectNext();
-            detailsView.gameList.forceActiveFocus();
         }
         onPrevCollection: {
+            gameList.forceActiveFocus();
+            filterText="";
+            currentGameIndex=0;
             collectionsView.selectPrev();
-            detailsView.gameList.forceActiveFocus();
         }
         onLaunchGame: {
             api.memory.set('collectionIndex', collectionsView.currentCollectionIndex);
-            api.memory.set('gameIndex', currentGameIndex);
+            api.memory.set('gameIndex', filteredSourceIndex);
             currentGame.launch();
         }
         onToggleFavorite: {

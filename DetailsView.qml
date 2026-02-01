@@ -1,4 +1,5 @@
 import QtQuick 2.15 // note the version: Text padding is used below and that was added in 2.7 as per docs
+import SortFilterProxyModel 0.2
 import "utils.js" as Utils // some helper functions
 import "collections.js" as Collections // collection definitions
 
@@ -10,21 +11,34 @@ FocusScope {
     property var currentCollection
     property var favoritesCollection
     property var lastPlayedCollection
+    property color colorAmigaBlue
+    property color colorAmigaOrange
 
-    property var colorAmigaBlue
-    property var colorAmigaOrange
     property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
 
-    // Shortcuts for the game list's currently selected game
+    SortFilterProxyModel {
+        id: filteredGames
+        sourceModel: currentCollection.games
+        filters: RegExpFilter {
+                roleName: "title"
+                pattern: filterInput.text
+                caseSensitivity: Qt.CaseInsensitive
+        }
+    }
+
     readonly property var gameList: gameList
     property alias currentGameIndex: gameList.currentIndex
-    readonly property var currentGame: switch(currentCollection.shortName) {
-        case "auto-lastplayed":
-            return lastPlayedCollection.sourceGame(currentGameIndex);
-        case "auto-favorites":
-            return favoritesCollection.sourceGame(currentGameIndex);
-        default:
-            return currentCollection.games.get(currentGameIndex);
+    property alias filterText: filterInput.text
+    property var filteredSourceIndex: filteredGames.mapToSource(currentGameIndex)
+    readonly property var currentGame: {
+        switch(currentCollection.shortName) {
+            case "auto-lastplayed":
+                return lastPlayedCollection.sourceGame(filteredSourceIndex);
+            case "auto-favorites":
+                return favoritesCollection.sourceGame(filteredSourceIndex);
+            default:
+                return currentCollection.games.get(filteredSourceIndex);
+        }
     }
 
     readonly property int padding: vpx(20)
@@ -248,14 +262,15 @@ FocusScope {
     //
     Item {
         // gamelist and window containter
-        id: gameListBg
+        id: gameListContainer
         anchors {
             top: header.bottom
             topMargin: root.padding
             left: parent.left
             leftMargin: root.padding
             bottom: footer.top
-            bottomMargin: root.padding / 2
+            // space for filter box
+            bottomMargin: vpx(40)
         }
         width: parent.width * 0.35
         height: parent.height
@@ -273,7 +288,7 @@ FocusScope {
             }
             focus: true
 
-            model: currentCollection.games
+            model: filteredGames
 
             delegate:
                 Rectangle {
@@ -325,7 +340,7 @@ FocusScope {
             preferredHighlightEnd: height * 0.5 + vpx(15)
 
             // toggle focus on tab and details key (i)
-            KeyNavigation.tab: descriptionScroll
+            KeyNavigation.tab: filterInput
             Keys.onPressed:
                 if (event.isAutoRepeat) {
                     return;
@@ -353,14 +368,79 @@ FocusScope {
             width: sourceSize.width
             height: sourceSize.height
         }
-    } // end gamelist and window container
+    } // end gameListContainer
+
+    Item {
+        // filterLabel and filterInput container
+        anchors {
+            top: gameListContainer.bottom
+            topMargin: vpx(5)
+            bottom: footer.top 
+            bottomMargin: root.padding / 2
+            left: parent.left
+            leftMargin: root.padding
+        }
+        width: gameListContainer.width
+
+        Text {
+            id: filterLabel
+            anchors {
+                top: parent.top
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
+            verticalAlignment: Text.AlignVCenter
+            font.family: amigaFont.name
+            font.pixelSize: vpx(16)
+            font.weight: Font.DemiBold
+            color: "white"
+            text: "Filter:"
+        }
+
+        Rectangle {
+            id: filterInputBg
+            color: filterInput.activeFocus ? "white" : colorAmigaBlue
+            anchors {
+                top: parent.top
+                left: filterLabel.right
+                leftMargin: vpx(5)
+                bottom: parent.bottom
+                right: parent.right
+            }
+
+            TextInput {
+                id: filterInput
+                anchors {
+                    fill: parent
+                    leftMargin: vpx(5)
+                    rightMargin: vpx(5)
+                    verticalCenter: parent.verticalCenter
+                }
+                focus: true
+                color: filterInput.activeFocus ? colorAmigaBlue : "black"
+                font.family: amigaFont.name
+                font.pixelSize: vpx(16)
+                font.capitalization: Font.AllUppercase
+                verticalAlignment: Text.AlignVCenter
+                KeyNavigation.tab: descriptionScroll
+                Keys.onUpPressed: {
+                    if (currentGameIndex > 0) currentGameIndex--;
+                    gameList.forceActiveFocus();
+                }
+                Keys.onDownPressed: {
+                    if (currentGameIndex < gameList.count - 1) currentGameIndex++;
+                    gameList.forceActiveFocus();
+                }
+            }
+        }
+    } //end box for filterInput
 
     Item {
         // art, details, description and window container
         anchors {
             top: header.bottom
             topMargin: root.padding
-            left: gameListBg.right
+            left: gameListContainer.right
             leftMargin: root.padding * 2
             right: parent.right
             rightMargin: root.padding
