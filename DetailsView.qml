@@ -432,9 +432,10 @@ FocusScope {
                     gameList.forceActiveFocus();
                 }
                 Keys.onPressed: {
-                    // keep game index on last item when typing or details don't refresh?
-                    // but not when switching focus
+                    if (event.isAutoRepeat) return;
                     if (event.key != Qt.Key_Tab && !api.keys.isDetails(event))
+                        // keep game index on last item when typing or details don't refresh?
+                        // but not when switching focus
                         currentGameIndex = gameList.count - 1;
                     if (event.key == Qt.Key_I) {
                         // catch i key so it doesn't shift focus as Details Key
@@ -453,10 +454,10 @@ FocusScope {
                         event.accepted = true;
                         descriptionScroll.forceActiveFocus();
                     }
-                }
-            }
-        }
-    } //end box for filterInput
+                } // end Keys.OnPressed
+            } // end FilterInput
+        } // end filterInputBg
+    } // end box for filterInput
 
     Item {
         // art, details, description and window container
@@ -473,7 +474,7 @@ FocusScope {
 
         opacity: 0.95
 
-        Item {
+        Rectangle {
             // need container to control boxart size
             id: boxart
             anchors {
@@ -482,37 +483,75 @@ FocusScope {
                 left: parent.left;
                 leftMargin: root.padding / 2
             }
-            width: boxartImage.status === Image.Ready ? vpx(333) : 0
+            focus: true
+            property var order: 0
+            width: boxartImage.status === Image.Ready ? vpx(333) : vpx(5)
             height: vpx(250)
+            color: "transparent"
+            border.width: vpx(1)
+            border.color: activeFocus ? "white" : "transparent"
+            KeyNavigation.tab: gameList
+            Keys.onUpPressed: {
+                if (currentGameIndex > 0) currentGameIndex--;
+                gameList.forceActiveFocus();
+            }
+            Keys.onDownPressed: {
+                if (currentGameIndex < gameList.count - 1) currentGameIndex++;
+                gameList.forceActiveFocus();
+            }
+            Keys.onPressed:
+                if (api.keys.isAccept(event)) {
+                    event.accepted = true;
+                    (order < 2) ? order++ : order = 0
+                    return;
+                } else if (api.keys.isDetails(event)) {
+                    event.accepted = true;
+                    gameList.forceActiveFocus();
+                    return;
+                }
 
             Image {
                 id: boxartImage
 
                 anchors.fill: parent
                 anchors.centerIn: parent
+                anchors.margins: vpx(2)
                 fillMode: Image.PreserveAspectFit
-                // skyscraper screenshoot is nice mixed image 3:4 ratio
-                source: currentGame.assets.boxFront ||
-                        currentGame.assets.screenshot ||
-                        currentGame.assets.logo ||
-                        currentGame.assets.marquee
+                // keep alternative images available when
+                // switching art preference
+                source:
+                    switch (boxart.order) {
+                        case 0: return (
+                            currentGame.assets.boxFront ||
+                            currentGame.assets.screenshot ||
+                            currentGame.assets.marquee
+                        );
+                        case 1: return (
+                            currentGame.assets.screenshot ||
+                            currentGame.assets.marquee ||
+                            currentGame.assets.boxFront
+                        );
+                        case 2: return (
+                            currentGame.assets.marquee ||
+                            currentGame.assets.screenshot ||
+                            currentGame.assets.boxFront
+                        );
+                    }
                 sourceSize.width: vpx(333)
                 sourceSize.height: vpx(250)
                 width: sourceSize.width
                 height: sourceSize.height
-            }
-        }
+            } // end boxartImage
+        } // end boxart rectangle
 
         RatingBar {
             id: ratingBar
-
             anchors {
                 top: parent.top
                 topMargin: root.padding
                 left: boxart.right
                 leftMargin: root.padding
             }
-
             percentage: currentGame.rating
         }
 
@@ -618,13 +657,13 @@ FocusScope {
                         contentY += 10;
                     }
                 // Toggle focus on tab and details key (i)
-                KeyNavigation.tab: gameList
+                KeyNavigation.tab: boxart
                 Keys.onPressed:
                     if (event.isAutoRepeat) {
                         return;
                     } else if (api.keys.isDetails(event)) {
                         event.accepted = true;
-                        gameList.forceActiveFocus();
+                        boxart.forceActiveFocus();
                         return;
                     }
             } // end descriptionScroll
