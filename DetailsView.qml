@@ -677,7 +677,7 @@ FocusScope {
                 left: parent.left
                 leftMargin: vpx(-2)
             }
-            source: descriptionScroll.activeFocus ?
+            source: (descriptionScroll.activeFocus || boxart.activeFocus) ?
                 "assets/details-window-details-focused.png" :
                 "assets/details-window-details-unfocused.png"
             sourceSize.width: parent.width + vpx(4)
