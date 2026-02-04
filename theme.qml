@@ -2,6 +2,9 @@ import QtQuick 2.0
 
 FocusScope {
     id: root
+    // Amiga Colors
+    readonly property color colorAmigaBlue: "#0057AF"
+    readonly property color colorAmigaOrange: "#FF8800"
 
     // Loading the fonts here makes them usable in the rest of the theme
     // and can be referred to using their name and weight.
@@ -14,20 +17,29 @@ FocusScope {
         source: "fonts/topaz_unicode_ks13_bold.ttf"
     }
 
-    property color colorAmigaBlue: "#0057AF"
-    property color colorAmigaOrange: "#FF8800"
-
-    // a empty collections model we can add to
-    ListModel { id: extendedCollections }
-    // all games
-    ListModel { id: allGamesCollection
-        readonly property var name: "All Games"
-        readonly property var shortName: "auto-allgames"
-        readonly property var games: api.allGames
-    }
-    // the auto-filled collections defined in seperate files
+    // Custom collections models we can add to.
+    // extendedCollections ListModel won't hold item functions, will
+    // need to reference them directly.
+    // Filled in CollectionsView before being attached to ListViews
+    // to avoid incomplete views on start.
+    AllGamesCollection { id: allGamesCollection }
+    // auto collections defined in their own QML files.
     FavoritesCollection { id: favoritesCollection }
     LastPlayedCollection { id: lastPlayedCollection }
+    ListModel {
+        id: extendedCollections
+        Component.onCompleted: {
+            // clone collections so we can add to it
+            for (var i = 0; i < api.collections.count; i++) {
+                append(api.collections.get(i));
+            }
+            append(allGamesCollection);
+            append(lastPlayedCollection);
+            append(favoritesCollection);
+            // attach model and restore saved position after it's filled
+            collectionsView.attachModelsRestore();
+        }
+    }
 
     // The actual views are defined in their own QML files. They activate
     // each other by setting the focus. The details view is glued to the bottom
@@ -44,8 +56,6 @@ FocusScope {
     DetailsView {
         id: detailsView
         anchors.top: collectionsView.bottom
-
-        currentCollection: collectionsView.currentCollection
 
         onCancel: {
             filterText="";

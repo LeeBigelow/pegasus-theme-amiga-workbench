@@ -7,8 +7,37 @@ import "collections.js" as Collections // collection definitions
 FocusScope {
     id: root
 
-    // This will be set in the main theme file
-    property var currentCollection
+    // Nothing particularly interesting, see CollectionsView for more comments
+    width: parent.width
+    height: parent.height
+    enabled: focus
+    visible: y < parent.height
+
+    readonly property int padding: vpx(20)
+    readonly property int detailsTextHeight: vpx(30)
+    readonly property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
+    property var currentCollection: collectionsView.currentCollection
+    // for theme.qml access
+    property alias filterText: filterInput.text
+    property alias gameList: gameList
+    property alias currentGameIndex: gameList.currentIndex
+    property var filteredSourceIndex: filteredGames.mapToSource(currentGameIndex)
+    readonly property var currentGame: {
+        switch(currentCollection.shortName) {
+            // extendedCollections ListModel can't hold item functions so need
+            // to reference items directly.
+            // "lastplayed" and "favorites" are self filtered so need their
+            // item functions to get source game.
+            case "auto-lastplayed":
+                return lastPlayedCollection.sourceGame(filteredSourceIndex);
+            case "auto-favorites":
+                return favoritesCollection.sourceGame(filteredSourceIndex);
+                // "all games" and original collection not self filtered so
+                // can reference their games directly
+            default:
+                return currentCollection.games.get(filteredSourceIndex);
+        }
+    }
 
     SortFilterProxyModel {
         id: filteredGames
@@ -19,31 +48,6 @@ FocusScope {
                 caseSensitivity: Qt.CaseInsensitive
         }
     }
-
-    readonly property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
-    readonly property var gameList: gameList
-    property alias currentGameIndex: gameList.currentIndex
-    property alias filterText: filterInput.text
-    property var filteredSourceIndex: filteredGames.mapToSource(currentGameIndex)
-    readonly property var currentGame: {
-        switch(currentCollection.shortName) {
-            case "auto-lastplayed":
-                return lastPlayedCollection.sourceGame(filteredSourceIndex);
-            case "auto-favorites":
-                return favoritesCollection.sourceGame(filteredSourceIndex);
-            default:
-                return currentCollection.games.get(filteredSourceIndex);
-        }
-    }
-
-    readonly property int padding: vpx(20)
-    readonly property int detailsTextHeight: vpx(30)
-
-    // Nothing particularly interesting, see CollectionsView for more comments
-    width: parent.width
-    height: parent.height
-    enabled: focus
-    visible: y < parent.height
 
     signal cancel
     signal nextCollection
