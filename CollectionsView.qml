@@ -23,13 +23,6 @@ FocusScope {
     readonly property var currentCollection: logoAxis.model.get(logoAxis.currentIndex)
     property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
 
-    // set from theme.qml
-    property var extendedCollections
-    property var lastPlayedCollection
-    property var favoritesCollection
-    property var allGamesCollection
-    property color colorAmigaBlue
-
     readonly property int padding: vpx(20)
 
     Component.onCompleted: {

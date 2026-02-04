@@ -36,12 +36,6 @@ FocusScope {
     CollectionsView {
         id: collectionsView
         anchors.bottom: parent.bottom
-        extendedCollections: extendedCollections
-        favoritesCollection: favoritesCollection
-        lastPlayedCollection: lastPlayedCollection
-        allGamesCollection: allGamesCollection
-
-        colorAmigaBlue: root.colorAmigaBlue
 
         focus: true
         onCollectionSelected: detailsView.focus = true
@@ -52,11 +46,6 @@ FocusScope {
         anchors.top: collectionsView.bottom
 
         currentCollection: collectionsView.currentCollection
-        favoritesCollection: favoritesCollection
-        lastPlayedCollection: lastPlayedCollection
-
-        colorAmigaBlue: root.colorAmigaBlue
-        colorAmigaOrange: root.colorAmigaOrange
 
         onCancel: {
             filterText="";

@@ -9,12 +9,6 @@ FocusScope {
 
     // This will be set in the main theme file
     property var currentCollection
-    property var favoritesCollection
-    property var lastPlayedCollection
-    property color colorAmigaBlue
-    property color colorAmigaOrange
-
-    property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
 
     SortFilterProxyModel {
         id: filteredGames
@@ -26,6 +20,7 @@ FocusScope {
         }
     }
 
+    readonly property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
     readonly property var gameList: gameList
     property alias currentGameIndex: gameList.currentIndex
     property alias filterText: filterInput.text
