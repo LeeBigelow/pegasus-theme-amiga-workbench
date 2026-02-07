@@ -58,7 +58,7 @@ FocusScope {
     // Key handling. In addition, pressing left/right also moves to the prev/next collection.
     Keys.onLeftPressed: prevCollection()
     Keys.onRightPressed: nextCollection()
-    Keys.onPressed:
+    Keys.onPressed: {
         if (event.isAutoRepeat) {
             return;
         } else if (api.keys.isAccept(event)) {
@@ -98,6 +98,7 @@ FocusScope {
             }
             return;
         }
+    } // end Keys.onPressed
 
 
     Rectangle {
@@ -120,6 +121,27 @@ FocusScope {
         }
 
         height: vpx(180)
+
+        MouseArea {
+            // swipe gestures for detailsView header
+            // left and right swipe switches current collection
+            // down swipe switches to collectionsView
+            anchors.fill: parent
+            property int startX
+            property int startY
+            onPressed: {
+                startX = mouse.x;
+                startY = mouse.y;
+            }
+            onReleased: {
+                if (mouse.y - startY > vpx(100)) {
+                    cancel();
+                    return;
+                }
+                if (mouse.x - startX > vpx(50)) nextCollection();
+                else if (startX - mouse.x > vpx(50)) prevCollection();
+            }
+        }
 
         // titlebar
         Image {
@@ -289,58 +311,68 @@ FocusScope {
 
             model: filteredGames
 
-            delegate:
-                Rectangle {
-                    // rectangle for each gameList item
-                    readonly property bool selected: ListView.isCurrentItem
+            delegate: Rectangle {
+                // rectangle for each gameList item
+                readonly property bool selected: ListView.isCurrentItem
 
-                    width: ListView.view.width
-                    height: gameTitle.height
+                width: ListView.view.width
+                height: gameTitle.height
+                color:
+                    if (selected) {
+                        gameList.activeFocus ? "white" : colorAmigaBlue;
+                    } else {
+                        return "transparent";
+                    }
+
+                Text {
+                    id: gameTitle
+                    text: (modelData.favorite ? "♥" : " ") + " " + modelData.title
                     color:
                         if (selected) {
-                            gameList.activeFocus ? "white" : colorAmigaBlue;
+                            gameList.activeFocus ? colorAmigaBlue : "black";
                         } else {
-                            return "transparent";
+                            return "white";
                         }
 
-                    Text {
-                        id: gameTitle
-                        text: (modelData.favorite ? "♥" : " ") + " " + modelData.title
-                        color:
-                            if (selected) {
-                                gameList.activeFocus ? colorAmigaBlue : "black";
-                            } else {
-                                return "white";
-                            }
+                    font.pixelSize: vpx(20)
+                    font.capitalization: Font.AllUppercase
+                    font.family: amigaFont.name
+                    font.weight: Font.DemiBold
 
-                        font.pixelSize: vpx(20)
-                        font.capitalization: Font.AllUppercase
-                        font.family: amigaFont.name
-                        font.weight: Font.DemiBold
+                    // set nice fixed height for amiga font
+                    // some utf8 chars in game titles will cause line
+                    // to not center vertically
+                    lineHeightMode: Text.FixedHeight
+                    lineHeight: vpx(30)
+                    verticalAlignment: Text.AlignVCenter
 
-                        // set nice fixed height for amiga font
-                        // some utf8 chars in game titles will cause line
-                        // to not center vertically
-                        lineHeightMode: Text.FixedHeight
-                        lineHeight: vpx(30)
-                        verticalAlignment: Text.AlignVCenter
-
-                        width: parent.width
-                        elide: Text.ElideRight
-                        leftPadding: vpx(5)
-                        rightPadding: vpx(10)
-                    }
+                    width: parent.width
+                    elide: Text.ElideRight
+                    leftPadding: vpx(5)
+                    rightPadding: vpx(10)
                 }
+
+                MouseArea {
+                    // gameList mouse actions
+                    // focus on click, launch on double click
+                    anchors.fill: parent
+                    onClicked: {
+                        gameList.currentIndex=index;
+                        gameList.forceActiveFocus();
+                    }
+                    onDoubleClicked: launchGame()
+                }
+            } // end gameList delegate rectangle
 
             clip: true
             highlightMoveDuration: 0
-            highlightRangeMode: ListView.ApplyRange
-            preferredHighlightBegin: height * 0.5 - vpx(15)
-            preferredHighlightEnd: height * 0.5 + vpx(15)
+            // highlightRangeMode: ListView.ApplyRange
+            // preferredHighlightBegin: height * 0.5 - vpx(15)
+            // preferredHighlightEnd: height * 0.5 + vpx(15)
 
             // toggle focus on tab and details key (i)
             KeyNavigation.tab: filterInput
-            Keys.onPressed:
+            Keys.onPressed: {
                 if (event.isAutoRepeat) {
                     return;
                 } else if (api.keys.isDetails(event)) {
@@ -348,6 +380,7 @@ FocusScope {
                     filterInput.forceActiveFocus();
                     return;
                 }
+            }
         } // end gameList ListView
 
         Image {
@@ -498,16 +531,33 @@ FocusScope {
                 if (currentGameIndex < gameList.count - 1) currentGameIndex++;
                 gameList.forceActiveFocus();
             }
-            Keys.onPressed:
+            Keys.onPressed: {
                 if (api.keys.isAccept(event)) {
                     event.accepted = true;
-                    (order < 2) ? order++ : order = 0
+                    (order < 2) ? order++ : order=0;
                     return;
                 } else if (api.keys.isDetails(event)) {
                     event.accepted = true;
                     gameList.forceActiveFocus();
                     return;
                 }
+            }
+
+            MouseArea {
+                // swipe gestures for box art
+                // left, right, and double click switches art
+                anchors.fill: parent
+                property int startX
+                onPressed: startX = mouse.x
+                onReleased: {
+                    if (mouse.x - startX > vpx(50))
+                        (boxart.order < 2) ? boxart.order++ : boxart.order=0;
+                    else if (startX - mouse.x > vpx(50))
+                        (boxart.order > 0) ? boxart.order-- : boxart.order=2;
+                }
+                onClicked: boxart.forceActiveFocus()
+                onDoubleClicked: (boxart.order < 2) ? boxart.order++ : boxart.order=0;
+            }
 
             Image {
                 id: boxartImage
@@ -518,24 +568,23 @@ FocusScope {
                 fillMode: Image.PreserveAspectFit
                 // keep alternative images available when
                 // switching art preference
-                source:
-                    switch (boxart.order) {
-                        case 0: return (
-                            currentGame.assets.boxFront ||
-                            currentGame.assets.screenshot ||
-                            currentGame.assets.marquee
-                        );
-                        case 1: return (
-                            currentGame.assets.screenshot ||
-                            currentGame.assets.marquee ||
-                            currentGame.assets.boxFront
-                        );
-                        case 2: return (
-                            currentGame.assets.marquee ||
-                            currentGame.assets.screenshot ||
-                            currentGame.assets.boxFront
-                        );
-                    }
+                source: switch (boxart.order) {
+                    case 0: return (
+                        currentGame.assets.boxFront ||
+                        currentGame.assets.screenshot ||
+                        currentGame.assets.marquee
+                    );
+                    case 1: return (
+                        currentGame.assets.screenshot ||
+                        currentGame.assets.marquee ||
+                        currentGame.assets.boxFront
+                    );
+                    case 2: return (
+                        currentGame.assets.marquee ||
+                        currentGame.assets.screenshot ||
+                        currentGame.assets.boxFront
+                    );
+                }
                 sourceSize.width: vpx(333)
                 sourceSize.height: vpx(250)
                 width: sourceSize.width
@@ -643,21 +692,23 @@ FocusScope {
 
                 // Keybindings for descriptionScroll
                 // scroll description on up and down
-                Keys.onUpPressed:
+                Keys.onUpPressed: {
                     if ((contentY - 10) < 0) {
                         contentY = 0;
                     } else {
                         contentY -= 10;
                     }
-                Keys.onDownPressed:
+                }
+                Keys.onDownPressed: {
                     if ((contentY + 10) > (gameDescription.height - height)) {
                         contentY = gameDescription.height - height;
                     } else {
                         contentY += 10;
                     }
+                }
                 // Toggle focus on tab and details key (i)
                 KeyNavigation.tab: boxart
-                Keys.onPressed:
+                Keys.onPressed: {
                     if (event.isAutoRepeat) {
                         return;
                     } else if (api.keys.isDetails(event)) {
@@ -665,6 +716,13 @@ FocusScope {
                         boxart.forceActiveFocus();
                         return;
                     }
+                }
+
+                MouseArea {
+                    // just focus description on click
+                    anchors.fill: parent
+                    onClicked: descriptionScroll.forceActiveFocus()
+                }
             } // end descriptionScroll
         } // end description container
 
@@ -703,6 +761,11 @@ FocusScope {
             anchors.bottom: parent.bottom
             imageSource: "assets/dpad_leftright.svg"
             imageLabel: "Collection Switch"
+            MouseArea {
+                // can also swipe header area
+                anchors.fill: parent
+                onClicked: nextCollection()
+            }
         }
 
         FooterImage {
@@ -718,6 +781,11 @@ FocusScope {
             anchors.left: upDownButton.right
             anchors.bottom: parent.bottom
             imageSource: "assets/button_b.svg"
+            MouseArea {
+                // can also double click game in list
+                anchors.fill: parent
+                onClicked: launchGame()
+            }
             imageLabel: "Select"
         }
 
@@ -727,6 +795,11 @@ FocusScope {
             anchors.bottom: parent.bottom
             imageSource: "assets/button_a.svg"
             imageLabel: "Back"
+            MouseArea {
+                // can also swipe down on header area
+                anchors.fill: parent
+                onClicked: cancel()
+            }
         }
 
         FooterImage {
@@ -735,6 +808,10 @@ FocusScope {
             anchors.bottom: parent.bottom
             imageSource: "assets/button_x.svg"
             imageLabel: "Toggle Favorite"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: toggleFavorite()
+            }
         }
 
         FooterImage {
@@ -746,6 +823,8 @@ FocusScope {
         }
 
         FooterImage {
+            // can swipe in from right to get pegasus settions
+            // not sure how to trigger that with alternate mouse action?
             id: startButton
             anchors.left: yButton.right
             anchors.bottom: parent.bottom

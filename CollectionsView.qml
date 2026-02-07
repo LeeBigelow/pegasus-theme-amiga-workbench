@@ -277,6 +277,11 @@ FocusScope {
                 }
 
             onItemSelected: root.collectionSelected()
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.collectionSelected()
+            }
         }
 
         Image {
@@ -336,6 +341,14 @@ FocusScope {
                     elide: Text.ElideRight
                 }
             } // end collectionInfoWindow
+
+            MouseArea {
+                // swipe up on colleciton info area to switch to detailsView
+                anchors.fill: parent
+                property int startY
+                onPressed: startY = mouse.y;
+                onReleased: if (startY - mouse.y > vpx(100)) root.collectionSelected();
+            }
         } // end bottom third container
 
         Item {
@@ -355,6 +368,10 @@ FocusScope {
                 anchors.bottom: parent.bottom
                 imageSource: "assets/dpad_leftright.svg"
                 imageLabel: "Collection Switch"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: selectNext()
+                }
             }
 
             FooterImage {
@@ -363,6 +380,10 @@ FocusScope {
                 anchors.bottom: parent.bottom
                 imageSource: "assets/button_b.svg"
                 imageLabel: "Select"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: root.collectionSelected()
+                }
             }
 
             FooterImage {
