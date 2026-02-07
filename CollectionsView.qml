@@ -319,7 +319,7 @@ FocusScope {
                 }
                 source: "assets/collections-window-info.png"
                 width: vpx(525)
-                height: vpx(205)
+                height: vpx(210)
                 asynchronous: true
                 Text {
                     id: collectionInfoLabel
@@ -333,9 +333,9 @@ FocusScope {
                     wrapMode: Text.Wrap
                     text: collectionInfo.info.join("\n")
                     color: "white"
-                    font.pixelSize: vpx(12)
+                    font.pixelSize: vpx(14)
                     lineHeightMode: Text.FixedHeight
-                    lineHeight: vpx(15)
+                    lineHeight: vpx(16)
                     font.family: amigaFont.name
                     elide: Text.ElideRight
                 }

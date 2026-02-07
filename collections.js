@@ -208,9 +208,9 @@ var COLLECTIONS = {
             "machine. Most arcade games are video games, pinball machines,",
             "electro-mechanical games, redemption games or merchandisers.",
             "While exact dates are debated, the golden age of arcade video games",
-            "is usually defined as a period beginning sometime in the late 1970s and",
-            "ending sometime in the mid-1980s. Excluding a brief resurgence in the",
-            "early 1990s, the arcade industry subsequently declined in the",
+            "is usually defined as a period beginning sometime in the late 1970s",
+            "and ending sometime in the mid-1980s. Excluding a brief resurgence",
+            "in the early 1990s, the arcade industry subsequently declined in the",
             "Western hemisphere as competing home video game consoles increased",
             "in their graphics and game-play capability and decreased in cost."
         ]

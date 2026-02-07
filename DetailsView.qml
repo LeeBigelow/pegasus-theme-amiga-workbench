@@ -681,10 +681,10 @@ FocusScope {
                     wrapMode: Text.WordWrap
                     width: descriptionScroll.width
                     horizontalAlignment: Text.AlignJustify
-                    font.pixelSize: vpx(16)
+                    font.pixelSize: vpx(18)
                     // set fixed line height or amiga topaz font behaves badly
                     lineHeightMode: Text.FixedHeight
-                    lineHeight: vpx(20)
+                    lineHeight: vpx(22)
                     font.family: amigaFont.name
                     font.weight: Font.DemiBold
                     color: "white"
