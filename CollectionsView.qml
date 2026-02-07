@@ -261,6 +261,10 @@ FocusScope {
             delegate: CollectionLogo {
                 longName: model.name
                 shortName: model.shortName
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: root.collectionSelected()
+                }
             }
 
             focus: true
@@ -277,11 +281,6 @@ FocusScope {
                 }
 
             onItemSelected: root.collectionSelected()
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.collectionSelected()
-            }
         }
 
         Image {
