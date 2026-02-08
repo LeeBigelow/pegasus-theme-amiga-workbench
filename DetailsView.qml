@@ -14,7 +14,7 @@ FocusScope {
     visible: y < parent.height
 
     readonly property int padding: vpx(20)
-    readonly property int detailsTextHeight: vpx(30)
+    readonly property int detailsTextHeight: vpx(26)
     readonly property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
     property var currentCollection: collectionsView.currentCollection
     // for theme.qml access
@@ -318,22 +318,16 @@ FocusScope {
 
                 width: ListView.view.width
                 height: gameTitle.height
-                color:
-                    if (selected) {
-                        gameList.activeFocus ? "white" : colorAmigaBlue;
-                    } else {
-                        return "transparent";
-                    }
+                color: selected ?
+                    (gameList.activeFocus ? "white" : colorAmigaBlue) :
+                    "transparent"
 
                 Text {
                     id: gameTitle
                     text: (modelData.favorite ? "♥" : " ") + " " + modelData.title
-                    color:
-                        if (selected) {
-                            gameList.activeFocus ? colorAmigaBlue : "black";
-                        } else {
-                            return "white";
-                        }
+                    color: selected ?
+                        (gameList.activeFocus ? colorAmigaBlue : "black") :
+                        "white"
 
                     font.pixelSize: vpx(20)
                     font.capitalization: Font.AllUppercase
@@ -597,7 +591,7 @@ FocusScope {
             id: ratingBar
             anchors {
                 top: parent.top
-                topMargin: root.padding
+                topMargin: root.padding / 2
                 left: boxart.right
                 leftMargin: root.padding
             }
@@ -643,6 +637,50 @@ FocusScope {
             GameInfoText { text: Utils.formatPlayers(currentGame.players) }
             GameInfoText { text: Utils.formatLastPlayed(currentGame.lastPlayed) }
             GameInfoText { text: Utils.formatPlayTime(currentGame.playTime) }
+        }
+
+        Rectangle {
+            id: launchButton
+            anchors {
+                top: gameLabels.bottom
+                left: boxart.right
+                leftMargin: root.padding
+                right: parent.right
+                rightMargin: root.padding + vpx(18)
+            }
+            focus: true
+            color: activeFocus ? colorAmigaOrange :
+                (launchButtonArea.containsMouse ? colorAmigaOrange : "white")
+            height: vpx(26)
+
+            Text {
+                anchors.centerIn: parent
+                text: "LAUNCH"
+                color: parent.activeFocus ? "black" :
+                    (launchButtonArea.containsMouse ? "black" : colorAmigaBlue)
+                font.family: amigaFont.name
+                font.pixelSize: vpx(20)
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            MouseArea {
+                id: launchButtonArea
+                anchors.fill: parent
+                onClicked: launchGame()
+                hoverEnabled: true
+            }
+
+            // Toggle focus on tab and details key (i)
+            KeyNavigation.tab: boxart
+            Keys.onPressed: {
+                if (event.isAutoRepeat) {
+                    return;
+                } else if (api.keys.isDetails(event)) {
+                    event.accepted = true;
+                    boxart.forceActiveFocus();
+                    return;
+                }
+            }
         }
 
         Rectangle {
@@ -708,13 +746,13 @@ FocusScope {
                     }
                 }
                 // Toggle focus on tab and details key (i)
-                KeyNavigation.tab: boxart
+                KeyNavigation.tab: launchButton
                 Keys.onPressed: {
                     if (event.isAutoRepeat) {
                         return;
                     } else if (api.keys.isDetails(event)) {
                         event.accepted = true;
-                        boxart.forceActiveFocus();
+                        launchButton.forceActiveFocus();
                         return;
                     }
                 }
