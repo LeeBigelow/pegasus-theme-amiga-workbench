@@ -14,7 +14,7 @@ FocusScope {
     visible: y < parent.height
 
     readonly property int padding: vpx(20)
-    readonly property int detailsTextHeight: vpx(26)
+    readonly property int detailsTextHeight: vpx(30)
     readonly property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
     property var currentCollection: collectionsView.currentCollection
     // for theme.qml access
@@ -512,8 +512,10 @@ FocusScope {
             }
             focus: true
             property var order: 0
-            width: boxartImage.status === Image.Ready ? vpx(333) : vpx(5)
-            height: vpx(250)
+            property var boxWidth: vpx(428)
+            property var boxHeight: vpx(321)
+            width: boxartImage.status === Image.Ready ? boxWidth : vpx(5)
+            height: boxHeight
             color: "transparent"
             border.width: vpx(1)
             border.color: activeFocus ? "white" : "transparent"
@@ -580,8 +582,8 @@ FocusScope {
                         currentGame.assets.boxFront
                     );
                 }
-                sourceSize.width: vpx(333)
-                sourceSize.height: vpx(250)
+                sourceSize.width: boxart.boxWidth
+                sourceSize.height: boxart.boxHeight
                 width: sourceSize.width
                 height: sourceSize.height
             } // end boxartImage
@@ -591,7 +593,7 @@ FocusScope {
             id: ratingBar
             anchors {
                 top: parent.top
-                topMargin: root.padding / 2
+                topMargin: root.padding
                 left: boxart.right
                 leftMargin: root.padding
             }
@@ -643,6 +645,7 @@ FocusScope {
             id: launchButton
             anchors {
                 top: gameLabels.bottom
+                topMargin: root.padding / 2
                 left: boxart.right
                 leftMargin: root.padding
                 right: parent.right
