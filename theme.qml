@@ -76,6 +76,7 @@ FocusScope {
         onLaunchGame: {
             api.memory.set('collectionIndex', collectionsView.currentCollectionIndex);
             api.memory.set('gameIndex', filteredSourceIndex);
+            api.memory.set('boxartOrder', boxartOrder);
             currentGame.launch();
         }
         onToggleFavorite: {
