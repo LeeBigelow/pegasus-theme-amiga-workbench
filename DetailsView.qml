@@ -675,6 +675,14 @@ FocusScope {
 
             // Toggle focus on tab and details key (i)
             KeyNavigation.tab: boxart
+            Keys.onUpPressed: {
+                if (currentGameIndex > 0) currentGameIndex--;
+                gameList.forceActiveFocus();
+            }
+            Keys.onDownPressed: {
+                if (currentGameIndex < gameList.count - 1) currentGameIndex++;
+                gameList.forceActiveFocus();
+            }
             Keys.onPressed: {
                 if (event.isAutoRepeat) {
                     return;
