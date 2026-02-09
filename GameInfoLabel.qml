@@ -7,6 +7,6 @@ Text {
     font.capitalization: Font.AllUppercase
     font.family: amigaFont.name
     font.weight: Font.DemiBold
-    height: root.detailsTextHeight
+    height: detailsTextHeight
     color: "white"
 }

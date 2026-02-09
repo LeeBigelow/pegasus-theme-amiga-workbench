@@ -6,7 +6,7 @@ Text {
     font.pixelSize: vpx(18)
     font.capitalization: Font.Capitalize
     font.family: amigaFont.name
-    height: root.detailsTextHeight
+    height: detailsTextHeight
     width: parent.width
     elide: Text.ElideRight
     color: "white"

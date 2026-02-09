@@ -4,15 +4,12 @@ import "utils.js" as Utils // some helper functions
 
 // The details "view". Consists of some images, a bunch of textual info and a game list.
 FocusScope {
-    id: root
-
     // Nothing particularly interesting, see CollectionsView for more comments
     width: parent.width
     height: parent.height
     enabled: focus
     visible: y < parent.height
 
-    readonly property int padding: vpx(20)
     readonly property int detailsTextHeight: vpx(30)
     property var currentCollection: collectionsView.currentCollection
     // for theme.qml access

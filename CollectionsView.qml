@@ -5,8 +5,6 @@ import "collections.js" as Collections // collection definitions
 // and one for the background images. They should have the same number of elements
 // to be kept in sync.
 FocusScope {
-    id: root
-
     // This element has the same size as the whole screen (ie. its parent).
     // Because this screen itself will be moved around when a collection is
     // selected, I've used width/height instead of anchors.
@@ -22,8 +20,6 @@ FocusScope {
     property alias currentCollectionIndex: logoAxis.currentIndex
     readonly property var currentCollection: logoAxis.model.get(logoAxis.currentIndex)
     readonly property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
-
-    readonly property int padding: vpx(20)
 
     // called from theme.qml after custom ListModel filled
     function attachModelsRestore() {
@@ -263,7 +259,7 @@ FocusScope {
                 shortName: model.shortName
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: root.collectionSelected()
+                    onClicked: collectionSelected()
                 }
             }
 
@@ -280,7 +276,7 @@ FocusScope {
                     decrementCurrentIndex();
                 }
 
-            onItemSelected: root.collectionSelected()
+            onItemSelected: collectionSelected()
         }
 
         Image {
@@ -346,7 +342,7 @@ FocusScope {
                 anchors.fill: parent
                 property int startY
                 onPressed: startY = mouse.y;
-                onReleased: if (startY - mouse.y > vpx(100)) root.collectionSelected();
+                onReleased: if (startY - mouse.y > vpx(100)) collectionSelected();
             }
         } // end bottom third container
 
@@ -381,7 +377,7 @@ FocusScope {
                 imageLabel: "Select"
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: root.collectionSelected()
+                    onClicked: collectionSelected()
                 }
             }
 
