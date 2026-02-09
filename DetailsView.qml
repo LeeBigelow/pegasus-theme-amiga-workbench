@@ -1,4 +1,4 @@
-import QtQuick 2.15 // note the version: Text padding is used below and that was added in 2.7 as per docs
+import QtQuick 2.7 // Text padding is used below and that was added in 2.7
 import SortFilterProxyModel 0.2
 import "utils.js" as Utils // some helper functions
 
