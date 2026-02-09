@@ -1,7 +1,12 @@
 # Amiga Workbench Pegasus Theme Todo
 
-- ~~add launch button to details column~~
-- ~~take bottom scrollbar off system description window, increase font~~
-- change CollectionsView to just one axis?
-- inputfilter, on accept switch to gameList and index to last
-    - android doesn't catch on screen key presses have to wait for accept?
+- [ ] make root refer to only theme.qml
+- [ ] collections.js imported in theme.qml and made property for children
+- [ ] sys info only visible if text exists
+- [ ] enter on description moves focus to gameList (better for tablet)
+- [ ] change opacity of help on focus/press (better tablet use)
+- [ ] favorite checkbox above launch button (focusable)
+- [ ] description scroll to external qml
+- [ ] launch button to external qml
+- [ ] filterInput to external qml
+- [ ] move bands to external qml

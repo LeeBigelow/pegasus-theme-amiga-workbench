@@ -1,7 +1,6 @@
 import QtQuick 2.15 // note the version: Text padding is used below and that was added in 2.7 as per docs
 import SortFilterProxyModel 0.2
 import "utils.js" as Utils // some helper functions
-import "collections.js" as Collections // collection definitions
 
 // The details "view". Consists of some images, a bunch of textual info and a game list.
 FocusScope {
@@ -15,7 +14,6 @@ FocusScope {
 
     readonly property int padding: vpx(20)
     readonly property int detailsTextHeight: vpx(30)
-    readonly property var collectionInfo: Collections.COLLECTIONS[currentCollection.shortName]
     property var currentCollection: collectionsView.currentCollection
     // for theme.qml access
     property alias boxartOrder: boxart.order
@@ -59,44 +57,23 @@ FocusScope {
     // Key handling. In addition, pressing left/right also moves to the prev/next collection.
     Keys.onLeftPressed: prevCollection()
     Keys.onRightPressed: nextCollection()
-    Keys.onPressed: {
-        if (event.isAutoRepeat) {
-            return;
-        } else if (api.keys.isAccept(event)) {
+    Keys.onPressed: switch (true) {
+        case (event.isAutoRepeat): return;
+        case (api.keys.isAccept(event)):   { event.accepted = true; launchGame(); return;}
+        case (api.keys.isCancel(event)):   { event.accepted = true; cancel(); return; }
+        case (api.keys.isNextPage(event)): { event.accepted = true; nextCollection(); return; }
+        case (api.keys.isPrevPage(event)): { event.accepted = true; prevCollection(); return; }
+        case (api.keys.isFilters(event)):  { event.accepted = true; toggleFavorite(); return; }
+        case (api.keys.isPageUp(event)): {
             event.accepted = true;
-            launchGame();
+            (currentGameIndex - 15) < 0 ?  currentGameIndex = 0 : currentGameIndex -= 15;
             return;
-        } else if (api.keys.isCancel(event)) {
+        }
+        case (api.keys.isPageDown(event)): {
             event.accepted = true;
-            cancel();
-            return;
-        } else if (api.keys.isNextPage(event)) {
-            event.accepted = true;
-            nextCollection();
-            return;
-        } else if (api.keys.isPrevPage(event)) {
-            event.accepted = true;
-            prevCollection();
-            return;
-        } else if (api.keys.isFilters(event)) {
-            event.accepted = true;
-            toggleFavorite();
-            return;
-        } else if (api.keys.isPageUp(event)) {
-            event.accepted = true;
-            if ( (currentGameIndex - 15) < 0 ) {
-                currentGameIndex = 0;
-            } else {
-                currentGameIndex -= 15;
-            }
-            return;
-        } else if (api.keys.isPageDown(event)) {
-            event.accepted = true;
-            if ((currentGameIndex + 15) > (currentCollection.games.count - 1)) {
-                currentGameIndex = (currentCollection.games.count - 1);
-            } else {
+            (currentGameIndex + 15) > (currentCollection.games.count - 1) ?
+                currentGameIndex = (currentCollection.games.count - 1) :
                 currentGameIndex += 15;
-            }
             return;
         }
     } // end Keys.onPressed
@@ -130,15 +107,9 @@ FocusScope {
             anchors.fill: parent
             property int startX
             property int startY
-            onPressed: {
-                startX = mouse.x;
-                startY = mouse.y;
-            }
+            onPressed: { startX = mouse.x; startY = mouse.y; }
             onReleased: {
-                if (mouse.y - startY > vpx(100)) {
-                    cancel();
-                    return;
-                }
+                if (mouse.y - startY > vpx(100)) { cancel(); return; }
                 if (mouse.x - startX > vpx(50)) nextCollection();
                 else if (startX - mouse.x > vpx(50)) prevCollection();
             }
@@ -459,12 +430,12 @@ FocusScope {
                     gameList.forceActiveFocus();
                 }
                 Keys.onPressed: {
-                    if (event.isAutoRepeat) return;
+                    // move game index to last item on key press so details refresh
+                    // but not for focus switching keys
                     if (event.key != Qt.Key_Tab && !api.keys.isDetails(event))
-                        // keep game index on last item when typing or details don't refresh?
-                        // but not when switching focus
                         currentGameIndex = gameList.count - 1;
-                    if (event.key == Qt.Key_I) {
+                    if (event.isAutoRepeat) return;
+                    else if (event.key == Qt.Key_I) {
                         // catch i key so it doesn't shift focus as Details Key
                         event.accepted=true;
                         filterInput.insert(cursorPosition,"i");
@@ -524,6 +495,7 @@ FocusScope {
             border.width: vpx(1)
             border.color: activeFocus ? "white" : "transparent"
             KeyNavigation.tab: gameList
+            // boxart focuses gameList on up/down
             Keys.onUpPressed: {
                 if (currentGameIndex > 0) currentGameIndex--;
                 gameList.forceActiveFocus();
@@ -534,6 +506,7 @@ FocusScope {
             }
             Keys.onPressed: {
                 if (api.keys.isAccept(event)) {
+                    // cycle boxart
                     event.accepted = true;
                     (order < 2) ? order++ : order=0;
                     return;
@@ -746,19 +719,11 @@ FocusScope {
 
                 // Keybindings for descriptionScroll
                 // scroll description on up and down
-                Keys.onUpPressed: {
-                    if ((contentY - 10) < 0) {
-                        contentY = 0;
-                    } else {
-                        contentY -= 10;
-                    }
-                }
+                Keys.onUpPressed: (contentY - 10) < 0 ?  contentY = 0 : contentY -= 10
                 Keys.onDownPressed: {
-                    if ((contentY + 10) > (gameDescription.height - height)) {
-                        contentY = gameDescription.height - height;
-                    } else {
-                        contentY += 10;
-                    }
+                    (contentY + 10) > (gameDescription.height - height) ?
+                        contentY = gameDescription.height - height :
+                        contentY += 10
                 }
                 // Move focus on tab and details key (i)
                 KeyNavigation.tab: launchButton
@@ -788,7 +753,7 @@ FocusScope {
                 left: parent.left
                 leftMargin: vpx(-2)
             }
-            source: (descriptionScroll.activeFocus || boxart.activeFocus) ?
+            source: (descriptionScroll.activeFocus || boxart.activeFocus || launchButton.activeFocus) ?
                 "assets/details-window-details-focused.png" :
                 "assets/details-window-details-unfocused.png"
             sourceSize.width: parent.width + vpx(4)
