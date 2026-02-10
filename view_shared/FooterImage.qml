@@ -14,7 +14,8 @@ Rectangle {
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
 
-        source: imageSource
+        // path given relative to parent not here so step up a dir
+        source: "../" + imageSource
         sourceSize.height: vpx(20)
         height: sourceSize.height
         fillMode: Image.PreserveAspectFit

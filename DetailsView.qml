@@ -1,6 +1,8 @@
 import QtQuick 2.7 // Text padding is used below and that was added in 2.7
 import SortFilterProxyModel 0.2
-import "utils.js" as Utils // some helper functions
+import "view_details/utils.js" as Utils // some helper functions
+import "view_details"
+import "view_shared"
 
 // The details "view". Consists of some images, a bunch of textual info and a game list.
 FocusScope {
@@ -121,7 +123,7 @@ FocusScope {
                 top: parent.top
                 left: parent.left
             }
-            source: "assets/titlebar.png"
+            source: "images/assets/titlebar.png"
             sourceSize.width: parent.width
             sourceSize.height: vpx(20)
             width: sourceSize.width
@@ -164,7 +166,7 @@ FocusScope {
                     }
                     fillMode: Image.PreserveAspectFit
                     source: currentCollection.shortName ?
-                        "consolegame/%1.svg".arg(currentCollection.shortName) : ""
+                        "images/consolegame/%1.svg".arg(currentCollection.shortName) : ""
                     sourceSize.height: vpx(90)
                     height: sourceSize.height
                     asynchronous: true
@@ -179,7 +181,7 @@ FocusScope {
                     }
                     fillMode: Image.PreserveAspectFit
                     source: currentCollection.shortName ?
-                        "controller/%1.svg".arg(currentCollection.shortName) : ""
+                        "images/controller/%1.svg".arg(currentCollection.shortName) : ""
                     sourceSize.height: vpx(90)
                     height: sourceSize.height
                     asynchronous: true
@@ -194,7 +196,7 @@ FocusScope {
                     left: parent.left
                     leftMargin: vpx(-2)
                 }
-                source: "assets/details-window-console.png"
+                source: "images/assets/details-window-console.png"
                 sourceSize.width: parent.width + vpx(4)
                 sourceSize.height: parent.height + vpx(22)
                 width: sourceSize.width
@@ -229,7 +231,7 @@ FocusScope {
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectFit
                     source: currentCollection.shortName ?
-                        "logo/%1.svg".arg(currentCollection.shortName) : undefined
+                        "images/logo/%1.svg".arg(currentCollection.shortName) : undefined
                     sourceSize.width: parent.width
                     sourceSize.height: parent.height
                     width: sourceSize.width
@@ -258,7 +260,7 @@ FocusScope {
                     left: parent.left
                     leftMargin: vpx(-2)
                 }
-                source: "assets/details-window-system.png"
+                source: "images/assets/details-window-system.png"
                 sourceSize.width: parent.width + vpx(4)
                 sourceSize.height: parent.height + vpx(22)
                 width: sourceSize.width
@@ -377,8 +379,8 @@ FocusScope {
                 leftMargin: vpx(-2)
             }
             source: gameList.activeFocus ?
-                "assets/details-window-games-focused.png" :
-                "assets/details-window-games-unfocused.png"
+                "images/assets/details-window-games-focused.png" :
+                "images/assets/details-window-games-unfocused.png"
             sourceSize.width: parent.width + vpx(4)
             sourceSize.height: parent.height + vpx(22)
             width: sourceSize.width
@@ -654,7 +656,8 @@ FocusScope {
                 Image {
                     anchors.centerIn: parent
                     fillMode: Image.PreserveAspectFit
-                    source: currentGame.favorite ? "assets/fav_filled.svg" : "assets/fav_hollow.svg"
+                    source: currentGame.favorite ?
+                        "images/assets/fav_filled.svg" : "images/assets/fav_hollow.svg"
                     sourceSize.height: detailsTextHeight
                     height: vpx(20)
                 }
@@ -839,8 +842,8 @@ FocusScope {
                      boxart.activeFocus ||
                      launchButton.activeFocus ||
                      favoriteButton.activeFocus) ?
-                "assets/details-window-details-focused.png" :
-                "assets/details-window-details-unfocused.png"
+                "images/assets/details-window-details-focused.png" :
+                "images/assets/details-window-details-unfocused.png"
             sourceSize.width: parent.width + vpx(4)
             sourceSize.height: parent.height + vpx(22)
             width: sourceSize.width
@@ -866,7 +869,7 @@ FocusScope {
             id: leftRightButton
             anchors.left: parent.left
             anchors.bottom: parent.bottom
-            imageSource: "assets/dpad_leftright.svg"
+            imageSource: "images/assets/dpad_leftright.svg"
             imageLabel: "Collection Switch"
             color: switchHelpArea.containsMouse ? colorAmigaOrange : colorAmigaBlue
             MouseArea {
@@ -882,7 +885,7 @@ FocusScope {
             id: upDownButton
             anchors.left: leftRightButton.right
             anchors.bottom: parent.bottom
-            imageSource: "assets/dpad_updown.svg"
+            imageSource: "images/assets/dpad_updown.svg"
             imageLabel: "Scroll"
         }
 
@@ -890,7 +893,7 @@ FocusScope {
             id: bButton
             anchors.left: upDownButton.right
             anchors.bottom: parent.bottom
-            imageSource: "assets/button_b.svg"
+            imageSource: "images/assets/button_b.svg"
             color: selectHelpArea.containsMouse ? colorAmigaOrange : colorAmigaBlue
             MouseArea {
                 id: selectHelpArea
@@ -906,7 +909,7 @@ FocusScope {
             id: aButton
             anchors.left: bButton.right
             anchors.bottom: parent.bottom
-            imageSource: "assets/button_a.svg"
+            imageSource: "images/assets/button_a.svg"
             imageLabel: "Back"
             color: backHelpArea.containsMouse ? colorAmigaOrange : colorAmigaBlue
             MouseArea {
@@ -922,7 +925,7 @@ FocusScope {
             id: xButton
             anchors.left: aButton.right
             anchors.bottom: parent.bottom
-            imageSource: "assets/button_x.svg"
+            imageSource: "images/assets/button_x.svg"
             imageLabel: "Toggle Favorite"
             color: favoriteHelpArea.containsMouse ? colorAmigaOrange : "transparent"
             MouseArea {
@@ -937,7 +940,7 @@ FocusScope {
             id: yButton
             anchors.left: xButton.right
             anchors.bottom: parent.bottom
-            imageSource: "assets/button_y.svg"
+            imageSource: "images/assets/button_y.svg"
             imageLabel: "Move Focus"
         }
 
@@ -947,7 +950,7 @@ FocusScope {
             id: startButton
             anchors.left: yButton.right
             anchors.bottom: parent.bottom
-            imageSource: "assets/button_start.svg"
+            imageSource: "images/assets/button_start.svg"
             imageLabel: "Settings"
         }
     }

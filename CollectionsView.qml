@@ -1,5 +1,7 @@
-import QtQuick 2.15
+import QtQuick 2.7
 import "collections.js" as CollectionsData // platform info
+import "view_collections"
+import "view_shared"
 
 // The collections view consists of two carousels, one for the collection logo bar
 // and one for the background images. They should have the same number of elements
@@ -94,7 +96,7 @@ FocusScope {
                     top: parent.top
                     left: parent.left
                 }
-                source: "assets/titlebar.png"
+                source: "images/assets/titlebar.png"
                 sourceSize.width: parent.width
                 sourceSize.height: vpx(20)
                 width: sourceSize.width
@@ -111,7 +113,7 @@ FocusScope {
                     right: parent.right
                     rightMargin: root.padding
                 }
-                source: "assets/ramdiskicon.png"
+                source: "images/assets/ramdiskicon.png"
                 sourceSize.width: vpx(96)
                 sourceSize.height: vpx(46)
                 width: sourceSize.width
@@ -128,7 +130,7 @@ FocusScope {
                     right: parent.right
                     rightMargin: root.padding
                 }
-                source: "assets/workbenchicon.png"
+                source: "images/assets/workbenchicon.png"
                 sourceSize.width: vpx(96)
                 sourceSize.height: vpx(46)
                 width: sourceSize.width
@@ -144,7 +146,7 @@ FocusScope {
                     right: parent.right
                     rightMargin: root.padding
                 }
-                source: "assets/cursor.png"
+                source: "images/assets/cursor.png"
                 sourceSize.width: vpx(24)
                 sourceSize.height: vpx(23)
                 width: sourceSize.width
@@ -180,7 +182,7 @@ FocusScope {
                         centerIn: consoleWindow
                         verticalCenterOffset: vpx(5)
                     }
-                    source: currentCollection.shortName ? "consolegame/%1.svg".arg(currentCollection.shortName) : ""
+                    source: currentCollection.shortName ? "images/consolegame/%1.svg".arg(currentCollection.shortName) : ""
                     sourceSize.width: vpx(530)
                     sourceSize.height: vpx(165)
                     width: sourceSize.width
@@ -197,7 +199,7 @@ FocusScope {
                         verticalCenterOffset: vpx(-7)
                         horizontalCenterOffset: vpx( -320 )
                     }
-                    source: "assets/collections-window-console.png"
+                    source: "images/assets/collections-window-console.png"
                     sourceSize.width: vpx(565)
                     sourceSize.height: vpx(215)
                     width: sourceSize.width
@@ -215,7 +217,7 @@ FocusScope {
                         centerIn: controllerWindow
                         verticalCenterOffset: vpx(5)
                     }
-                    source: currentCollection.shortName ? "controller/%1.svg".arg(currentCollection.shortName) : ""
+                    source: currentCollection.shortName ? "images/controller/%1.svg".arg(currentCollection.shortName) : ""
                     sourceSize.width: vpx(305)
                     sourceSize.height: vpx(175)
                     width: sourceSize.width
@@ -232,7 +234,7 @@ FocusScope {
                         verticalCenterOffset: vpx(-7)
                         horizontalCenterOffset: vpx(200)
                     }
-                    source: "assets/collections-window-controller.png"
+                    source: "images/assets/collections-window-controller.png"
                     sourceSize.width: vpx(320)
                     sourceSize.height: vpx(215)
                     width: sourceSize.width
@@ -290,7 +292,7 @@ FocusScope {
                 centerIn: parent
                 verticalCenterOffset: vpx(-5)
             }
-            source: "assets/collections-window-system.png"
+            source: "images/assets/collections-window-system.png"
             sourceSize.height: vpx(208)
             sourceSize.width: parent.width
             height: sourceSize.height
@@ -316,7 +318,7 @@ FocusScope {
                     centerIn: parent
                     horizontalCenterOffset: vpx(200)
                 }
-                source: "assets/collections-window-info.png"
+                source: "images/assets/collections-window-info.png"
                 width: vpx(525)
                 height: vpx(205)
                 asynchronous: true
@@ -365,7 +367,7 @@ FocusScope {
                 id: leftRightButton
                 anchors.left: parent.left
                 anchors.bottom: parent.bottom
-                imageSource: "assets/dpad_leftright.svg"
+                imageSource: "images/assets/dpad_leftright.svg"
                 imageLabel: "Collection Switch"
                 color: switchHelpArea.containsMouse ? colorAmigaOrange : "transparent"
                 MouseArea {
@@ -380,7 +382,7 @@ FocusScope {
                 id: bButton
                 anchors.left: leftRightButton.right
                 anchors.bottom: parent.bottom
-                imageSource: "assets/button_b.svg"
+                imageSource: "images/assets/button_b.svg"
                 imageLabel: "Select"
                 color: selectHelpArea.containsMouse ? colorAmigaOrange : "transparent"
                 MouseArea {
@@ -395,7 +397,7 @@ FocusScope {
                 id: startButton
                 anchors.left: bButton.right
                 anchors.bottom: parent.bottom
-                imageSource: "assets/button_start.svg"
+                imageSource: "images/assets/button_start.svg"
                 imageLabel: "Settings"
             }
         } // end footer
