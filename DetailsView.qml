@@ -10,7 +10,7 @@ FocusScope {
     enabled: focus
     visible: y < parent.height
 
-    readonly property int detailsTextHeight: vpx(30)
+    readonly property int detailsTextHeight: vpx(28)
     property var currentCollection: collectionsView.currentCollection
     // for theme.qml access
     property alias boxartOrder: boxart.order
@@ -85,7 +85,9 @@ FocusScope {
         color: colorAmigaBlue
     }
 
-
+    //
+    // Header
+    //
     Item {
         // top header for titlebar, console and logo windows
         id: header
@@ -127,7 +129,7 @@ FocusScope {
             asynchronous: true
         }
 
-        // Game count in titlebar
+        // game count in titlebar
         Text {
             id: gamecount
             anchors.centerIn: titlebar
@@ -137,9 +139,8 @@ FocusScope {
             font.family: amigaFont.name
         }
 
-
+        // containter for console+controller image and it's window frame
         Item {
-            // containter for console+controller image and window
             id: consoleController
             anchors {
                 top: titlebar.bottom
@@ -199,10 +200,10 @@ FocusScope {
                 width: sourceSize.width
                 height: sourceSize.height
             }
-        } // end containter for console+controller image and window
+        } // end containter for console+controller image and its window
 
+        // system logo and it's window frame
         Item {
-            // system logo and window containter
             anchors {
                 top: titlebar.bottom
                 topMargin: root.padding * 2
@@ -248,10 +249,10 @@ FocusScope {
     } // end top header for titlebar, console and logo windows
 
     //
-    // Main content
+    // Game List and Filter
     //
+    // gamelist and it's window frame
     Item {
-        // gamelist and window containter
         id: gameListContainer
         anchors {
             top: header.bottom
@@ -329,11 +330,12 @@ FocusScope {
 
             clip: true
             highlightMoveDuration: 0
+            // highlightRange messing up on resume so disabled
             // highlightRangeMode: ListView.ApplyRange
             // preferredHighlightBegin: height * 0.5 - vpx(15)
             // preferredHighlightEnd: height * 0.5 + vpx(15)
 
-            // toggle focus on tab and details key (i)
+            // gameList move focus
             KeyNavigation.tab: filterInput
             Keys.onPressed: {
                 if (event.isAutoRepeat) {
@@ -347,7 +349,7 @@ FocusScope {
         } // end gameList ListView
 
         Image {
-            // gameListWindow
+            // gameList window frame
             id: gameListWindow
             anchors {
                 top: parent.top
@@ -363,7 +365,7 @@ FocusScope {
             width: sourceSize.width
             height: sourceSize.height
         }
-    } // end gameListContainer
+    } // end gameList and it's window container
 
     Item {
         // filterLabel and filterInput container
@@ -453,13 +455,16 @@ FocusScope {
                         currentGameIndex = gameList.count - 1;
                         gameList.forceActiveFocus();
                     }
-                } // end Keys.OnPressed
-            } // end FilterInput TextInput
+                } // end filterInput Keys.OnPressed
+            } // end filterInput TextInput
         } // end filterInputBg
     } // end box for filterInput and label
 
+    //
+    // Details and Game Art
+    //
     Item {
-        // art, details, description and window container
+        // art, details, description and it's window frame
         anchors {
             top: header.bottom
             topMargin: root.padding
@@ -509,7 +514,7 @@ FocusScope {
                     return;
                 } else if (api.keys.isDetails(event)) {
                     event.accepted = true;
-                    launchButton.forceActiveFocus();
+                    favoriteButton.forceActiveFocus();
                     return;
                 }
             }
@@ -591,6 +596,7 @@ FocusScope {
             GameInfoLabel { text: "Players:" }
             GameInfoLabel { text: "Last played:" }
             GameInfoLabel { text: "Play time:" }
+            GameInfoLabel { text: "Favorite:" }
         }
 
         Column {
@@ -613,6 +619,58 @@ FocusScope {
             GameInfoText { text: Utils.formatPlayers(currentGame.players) }
             GameInfoText { text: Utils.formatLastPlayed(currentGame.lastPlayed) }
             GameInfoText { text: Utils.formatPlayTime(currentGame.playTime) }
+            Rectangle {
+                id: favoriteButton
+                focus: true
+                anchors {
+                    left: parent.left
+                    right:  parent.right
+                    rightMargin: root.padding
+                }
+
+                height: vpx(26)
+                color: activeFocus ? colorAmigaOrange :
+                    (favoriteButtonArea.containsMouse ? colorAmigaOrange : "white")
+
+                Image {
+                    anchors.centerIn: parent
+                    fillMode: Image.PreserveAspectFit
+                    source: currentGame.favorite ? "assets/fav_filled.svg" : "assets/fav_hollow.svg"
+                    sourceSize.height: detailsTextHeight
+                    height: vpx(20)
+                }
+
+                MouseArea {
+                    id: favoriteButtonArea
+                    anchors.fill: parent
+                    onClicked: toggleFavorite()
+                    hoverEnabled: true
+                }
+
+                // favoriteButton move focus
+                KeyNavigation.tab: boxart
+                Keys.onUpPressed: {
+                    if (currentGameIndex > 0) currentGameIndex--;
+                    gameList.forceActiveFocus();
+                }
+                Keys.onDownPressed: {
+                    if (currentGameIndex < gameList.count - 1) currentGameIndex++;
+                    gameList.forceActiveFocus();
+                }
+                Keys.onPressed: {
+                    if (event.isAutoRepeat) {
+                        return;
+                    } else if (api.keys.isAccept(event)) {
+                        event.accepted = true;
+                        toggleFavorite();
+                        return;
+                    } else if (api.keys.isDetails(event)) {
+                        event.accepted = true;
+                        launchButton.forceActiveFocus();
+                        return;
+                    }
+                }
+            } // end favoriteButton rectangle
         }
 
         Rectangle {
@@ -648,7 +706,7 @@ FocusScope {
             }
 
             // Move focus on tab and details key (i)
-            KeyNavigation.tab: boxart
+            KeyNavigation.tab: favoriteButton
             Keys.onUpPressed: {
                 if (currentGameIndex > 0) currentGameIndex--;
                 gameList.forceActiveFocus();
@@ -660,6 +718,10 @@ FocusScope {
             Keys.onPressed: {
                 if (event.isAutoRepeat) {
                     return;
+                } else if (api.keys.isAccept(event)) {
+                    event.accepted = true;
+                    launchGame();
+                    return;
                 } else if (api.keys.isDetails(event)) {
                     event.accepted = true;
                     descriptionScroll.forceActiveFocus();
@@ -668,6 +730,9 @@ FocusScope {
             }
         } // end launchButton
 
+        //
+        // Game Description
+        //
         Rectangle {
             // wrap description in rectangle for border on focus
             anchors {
@@ -744,13 +809,17 @@ FocusScope {
 
         Image {
             // details window
+            // show active frame if any children have focus
             anchors {
                 top: parent.top
                 topMargin: vpx(-20)
                 left: parent.left
                 leftMargin: vpx(-2)
             }
-            source: (descriptionScroll.activeFocus || boxart.activeFocus || launchButton.activeFocus) ?
+            source: (descriptionScroll.activeFocus ||
+                     boxart.activeFocus ||
+                     launchButton.activeFocus ||
+                     favoriteButton.activeFocus) ?
                 "assets/details-window-details-focused.png" :
                 "assets/details-window-details-unfocused.png"
             sourceSize.width: parent.width + vpx(4)
@@ -760,6 +829,9 @@ FocusScope {
         }
     } // end art, details, description and window container
 
+    //
+    // Help Footer
+    //
     Item {
         id: footer
         anchors {
@@ -777,10 +849,13 @@ FocusScope {
             anchors.bottom: parent.bottom
             imageSource: "assets/dpad_leftright.svg"
             imageLabel: "Collection Switch"
+            color: switchHelpArea.containsMouse ? colorAmigaOrange : colorAmigaBlue
             MouseArea {
+                id: switchHelpArea
                 // can also swipe header area
                 anchors.fill: parent
                 onClicked: nextCollection()
+                hoverEnabled: true
             }
         }
 
@@ -797,10 +872,13 @@ FocusScope {
             anchors.left: upDownButton.right
             anchors.bottom: parent.bottom
             imageSource: "assets/button_b.svg"
+            color: selectHelpArea.containsMouse ? colorAmigaOrange : colorAmigaBlue
             MouseArea {
+                id: selectHelpArea
                 // can also double click game in list
                 anchors.fill: parent
                 onClicked: launchGame()
+                hoverEnabled: true
             }
             imageLabel: "Select"
         }
@@ -811,10 +889,13 @@ FocusScope {
             anchors.bottom: parent.bottom
             imageSource: "assets/button_a.svg"
             imageLabel: "Back"
+            color: backHelpArea.containsMouse ? colorAmigaOrange : colorAmigaBlue
             MouseArea {
+                id: backHelpArea
                 // can also swipe down on header area
                 anchors.fill: parent
                 onClicked: cancel()
+                hoverEnabled: true
             }
         }
 
@@ -824,9 +905,12 @@ FocusScope {
             anchors.bottom: parent.bottom
             imageSource: "assets/button_x.svg"
             imageLabel: "Toggle Favorite"
+            color: favoriteHelpArea.containsMouse ? colorAmigaOrange : "transparent"
             MouseArea {
+                id: favoriteHelpArea
                 anchors.fill: parent
                 onClicked: toggleFavorite()
+                hoverEnabled: true
             }
         }
 
@@ -835,7 +919,7 @@ FocusScope {
             anchors.left: xButton.right
             anchors.bottom: parent.bottom
             imageSource: "assets/button_y.svg"
-            imageLabel: "Toggle Focus"
+            imageLabel: "Move Focus"
         }
 
         FooterImage {

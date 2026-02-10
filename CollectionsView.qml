@@ -367,9 +367,12 @@ FocusScope {
                 anchors.bottom: parent.bottom
                 imageSource: "assets/dpad_leftright.svg"
                 imageLabel: "Collection Switch"
+                color: switchHelpArea.containsMouse ? colorAmigaOrange : "transparent"
                 MouseArea {
+                    id: switchHelpArea
                     anchors.fill: parent
                     onClicked: selectNext()
+                    hoverEnabled: true
                 }
             }
 
@@ -379,9 +382,12 @@ FocusScope {
                 anchors.bottom: parent.bottom
                 imageSource: "assets/button_b.svg"
                 imageLabel: "Select"
+                color: selectHelpArea.containsMouse ? colorAmigaOrange : "transparent"
                 MouseArea {
+                    id: selectHelpArea
                     anchors.fill: parent
                     onClicked: collectionSelected()
+                    hoverEnabled: true
                 }
             }
 

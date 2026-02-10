@@ -2,11 +2,12 @@ import QtQuick 2.0
 
 // The collection logo on the collection carousel. Just an image that gets scaled
 // and more visible when selected. Also has a fallback text if there's no image.
-Item {
+Rectangle {
     property string imageSource
     property string imageLabel
     height: vpx(40)
     width: vpx(15) + label.contentWidth + image.paintedWidth
+    color: "transparent"
 
     Image {
         id: image
