@@ -2,11 +2,11 @@ import QtQuick 2.7
 import "collections.js" as CollectionsData // platform info
 import "view_collections"
 import "view_shared"
-
-// The collections view consists of two carousels, one for the collection logo bar
+// CollectionsView: The collections view consists of two carousels, one for the collection logo bar
 // and one for the background images. They should have the same number of elements
 // to be kept in sync.
 FocusScope {
+    id: root
     // This element has the same size as the whole screen (ie. its parent).
     // Because this screen itself will be moved around when a collection is
     // selected, I've used width/height instead of anchors.
@@ -21,10 +21,11 @@ FocusScope {
     // by the Details view too, for example to show the collection's logo.
     property alias currentCollectionIndex: logoAxis.currentIndex
     readonly property var currentCollection: logoAxis.model.get(logoAxis.currentIndex)
+    // if system isn't in collections.js show the "DUMMY" empty system
     readonly property var collectionInfo:
-        (CollectionsData.COLLECTIONS[currentCollection.shortName] !== undefined) ?
-            CollectionsData.COLLECTIONS[currentCollection.shortName] :
-            CollectionsData.COLLECTIONS["DUMMY"]
+        (CollectionsData.COLLECTIONS[currentCollection.shortName] === undefined) ?
+            CollectionsData.COLLECTIONS["DUMMY"] :
+            CollectionsData.COLLECTIONS[currentCollection.shortName]
 
     // called from theme.qml after custom ListModel filled
     function attachModelsRestore() {
@@ -109,9 +110,9 @@ FocusScope {
                 id: ramdiskIcon
                 anchors {
                     top: titlebar.bottom
-                    topMargin: root.padding
+                    topMargin: defaultPadding
                     right: parent.right
-                    rightMargin: root.padding
+                    rightMargin: defaultPadding
                 }
                 source: "images/assets/ramdiskicon.png"
                 sourceSize.width: vpx(96)
@@ -126,9 +127,9 @@ FocusScope {
                 id: workbenchIcon
                 anchors {
                     top: ramdiskIcon.bottom
-                    topMargin: root.padding
+                    topMargin: defaultPadding
                     right: parent.right
-                    rightMargin: root.padding
+                    rightMargin: defaultPadding
                 }
                 source: "images/assets/workbenchicon.png"
                 sourceSize.width: vpx(96)
@@ -144,7 +145,7 @@ FocusScope {
                 anchors {
                     top: workbenchIcon.bottom
                     right: parent.right
-                    rightMargin: root.padding
+                    rightMargin: defaultPadding
                 }
                 source: "images/assets/cursor.png"
                 sourceSize.width: vpx(24)
@@ -165,7 +166,7 @@ FocusScope {
             }
 
             Item {
-                // top third windows container
+                // top third below titlebar container
                 anchors {
                     top: titlebar.bottom
                     left: parent.left
@@ -352,55 +353,16 @@ FocusScope {
             }
         } // end bottom third container
 
-        Item {
+        CollectionsFooter {
             id: footer
             anchors {
                 bottom: parent.bottom
                 left: parent.left
-                leftMargin: root.padding
+                leftMargin: defaultPadding
                 right: parent.right
-                rightMargin: root.padding
+                rightMargin: defaultPadding
             }
-            height: vpx(30)
-
-            FooterImage {
-                id: leftRightButton
-                anchors.left: parent.left
-                anchors.bottom: parent.bottom
-                imageSource: "images/assets/dpad_leftright.svg"
-                imageLabel: "Collection Switch"
-                color: switchHelpArea.containsMouse ? colorAmigaOrange : "transparent"
-                MouseArea {
-                    id: switchHelpArea
-                    anchors.fill: parent
-                    onClicked: selectNext()
-                    hoverEnabled: true
-                }
-            }
-
-            FooterImage {
-                id: bButton
-                anchors.left: leftRightButton.right
-                anchors.bottom: parent.bottom
-                imageSource: "images/assets/button_b.svg"
-                imageLabel: "Select"
-                color: selectHelpArea.containsMouse ? colorAmigaOrange : "transparent"
-                MouseArea {
-                    id: selectHelpArea
-                    anchors.fill: parent
-                    onClicked: collectionSelected()
-                    hoverEnabled: true
-                }
-            }
-
-            FooterImage {
-                id: startButton
-                anchors.left: bButton.right
-                anchors.bottom: parent.bottom
-                imageSource: "images/assets/button_start.svg"
-                imageLabel: "Settings"
-            }
-        } // end footer
+        }
     }
 
 }

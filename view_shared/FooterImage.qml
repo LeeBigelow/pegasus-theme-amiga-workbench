@@ -1,13 +1,12 @@
 import QtQuick 2.0
-
-// The collection logo on the collection carousel. Just an image that gets scaled
-// and more visible when selected. Also has a fallback text if there's no image.
+// FooterImage: image and label side by side
 Rectangle {
+    id: root
     property string imageSource
     property string imageLabel
     height: vpx(40)
     width: vpx(15) + label.contentWidth + image.paintedWidth
-    color: "transparent"
+    color: mouseArea.containsMouse ? colorAmigaOrange : "transparent"
 
     Image {
         id: image
@@ -31,5 +30,12 @@ Rectangle {
         font.family: amigaFont.name
         font.pixelSize: vpx(16)
         text: imageLabel
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        onClicked: imageAction()
+        hoverEnabled: true
     }
 }

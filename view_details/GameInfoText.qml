@@ -1,8 +1,7 @@
 import QtQuick 2.0
-
-// All the game details text have the same basic properties
-// so I've moved them into a new QML type.
+// GameInfoText: Detail properties
 Text {
+    id: root
     font.pixelSize: vpx(18)
     font.capitalization: Font.Capitalize
     font.family: amigaFont.name

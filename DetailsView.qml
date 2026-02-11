@@ -6,6 +6,7 @@ import "view_shared"
 
 // The details "view". Consists of some images, a bunch of textual info and a game list.
 FocusScope {
+    id: root
     // Nothing particularly interesting, see CollectionsView for more comments
     width: parent.width
     height: parent.height
@@ -146,16 +147,16 @@ FocusScope {
             id: consoleController
             anchors {
                 top: titlebar.bottom
-                topMargin: root.padding * 2
+                topMargin: defaultPadding * 2
                 left: parent.left
-                leftMargin: root.padding
+                leftMargin: defaultPadding
             }
             height: vpx(100)
             width: vpx(600)
             Item {
                 // console+controller inner images
                 height: parent.height
-                width: consoleGame.width + controller.width + root.padding
+                width: consoleGame.width + controller.width + defaultPadding
                 anchors.horizontalCenter: parent.horizontalCenter
                 Image {
                     id: consoleGame
@@ -177,7 +178,7 @@ FocusScope {
                         top: parent.top
                         topMargin: vpx(5)
                         left: consoleGame.right
-                        leftMargin: root.padding
+                        leftMargin: defaultPadding
                     }
                     fillMode: Image.PreserveAspectFit
                     source: currentCollection.shortName ?
@@ -208,9 +209,9 @@ FocusScope {
         Item {
             anchors {
                 top: titlebar.bottom
-                topMargin: root.padding * 2
+                topMargin: defaultPadding * 2
                 right: parent.right
-                rightMargin: root.padding
+                rightMargin: defaultPadding
             }
             height: vpx(100)
             width: vpx(600)
@@ -246,7 +247,7 @@ FocusScope {
                     color: "white"
                     font.family: amigaFont.name
                     font.pixelSize: vpx(24)
-                    text: currentCollection.name + "\n (" + currentCollection.shortName + ")"
+                    text: currentCollection.name // shortName should be in titlebar
                     horizontalAlignment: Text.AlignHCenter
                     visible: logo.status != Image.Ready
                 }
@@ -277,9 +278,9 @@ FocusScope {
         id: gameListContainer
         anchors {
             top: header.bottom
-            topMargin: root.padding
+            topMargin: defaultPadding
             left: parent.left
-            leftMargin: root.padding
+            leftMargin: defaultPadding
             bottom: footer.top
             // space for filter box
             bottomMargin: vpx(40)
@@ -294,9 +295,9 @@ FocusScope {
             width: parent.width
             anchors.fill: parent
             anchors {
-                topMargin: root.padding / 2
-                rightMargin: root.padding / 2
-                bottomMargin: root.padding / 2
+                topMargin: defaultPadding / 2
+                rightMargin: defaultPadding / 2
+                bottomMargin: defaultPadding / 2
             }
             focus: true
 
@@ -394,9 +395,9 @@ FocusScope {
             top: gameListContainer.bottom
             topMargin: vpx(5)
             bottom: footer.top
-            bottomMargin: root.padding / 2
+            bottomMargin: defaultPadding / 2
             left: parent.left
-            leftMargin: root.padding
+            leftMargin: defaultPadding
         }
         width: gameListContainer.width
 
@@ -488,13 +489,13 @@ FocusScope {
         // art, details, description and it's window frame
         anchors {
             top: header.bottom
-            topMargin: root.padding
+            topMargin: defaultPadding
             left: gameListContainer.right
-            leftMargin: root.padding * 2
+            leftMargin: defaultPadding * 2
             right: parent.right
-            rightMargin: root.padding
+            rightMargin: defaultPadding
             bottom: footer.top
-            bottomMargin: root.padding / 2
+            bottomMargin: defaultPadding / 2
         }
 
         opacity: 0.95
@@ -504,9 +505,9 @@ FocusScope {
             id: boxart
             anchors {
                 top: parent.top;
-                topMargin: root.padding / 2
+                topMargin: defaultPadding / 2
                 left: parent.left;
-                leftMargin: root.padding / 2
+                leftMargin: defaultPadding / 2
             }
             focus: true
             property var order: 0
@@ -593,9 +594,9 @@ FocusScope {
             id: ratingBar
             anchors {
                 top: parent.top
-                topMargin: root.padding
+                topMargin: defaultPadding
                 left: boxart.right
-                leftMargin: root.padding
+                leftMargin: defaultPadding
             }
             percentage: currentGame.rating
         }
@@ -606,9 +607,9 @@ FocusScope {
             id: gameLabels
             anchors {
                 top: ratingBar.bottom
-                topMargin: root.padding / 2
+                topMargin: defaultPadding / 2
                 left: boxart.right
-                leftMargin: root.padding
+                leftMargin: defaultPadding
             }
             GameInfoLabel { text: "Released:" }
             GameInfoLabel { text: "Developer:" }
@@ -625,9 +626,9 @@ FocusScope {
             anchors {
                 top: gameLabels.top
                 left: gameLabels.right
-                leftMargin: root.padding / 2
+                leftMargin: defaultPadding / 2
                 right: parent.right
-                rightMargin: root.padding
+                rightMargin: defaultPadding
             }
 
             // 'width' is set so if the text is too long it will be cut. I also use some
@@ -646,7 +647,7 @@ FocusScope {
                 anchors {
                     left: parent.left
                     right:  parent.right
-                    rightMargin: root.padding
+                    rightMargin: defaultPadding
                 }
 
                 height: vpx(26)
@@ -699,11 +700,11 @@ FocusScope {
             id: launchButton
             anchors {
                 top: gameLabels.bottom
-                topMargin: root.padding / 2
+                topMargin: defaultPadding / 2
                 left: boxart.right
-                leftMargin: root.padding
+                leftMargin: defaultPadding
                 right: parent.right
-                rightMargin: root.padding + vpx(18)
+                rightMargin: defaultPadding + vpx(18)
             }
             focus: true
             color: activeFocus ? colorAmigaOrange :
@@ -774,10 +775,10 @@ FocusScope {
                 id: descriptionScroll
                 anchors {
                     fill: parent
-                    topMargin: root.padding / 2
-                    bottomMargin: root.padding / 2
-                    leftMargin: root.padding
-                    rightMargin: root.padding
+                    topMargin: defaultPadding / 2
+                    bottomMargin: defaultPadding / 2
+                    leftMargin: defaultPadding
+                    rightMargin: defaultPadding
                 }
                 clip: true
                 focus: true
@@ -854,104 +855,14 @@ FocusScope {
     //
     // Help Footer
     //
-    Item {
+    DetailsFooter {
         id: footer
         anchors {
             bottom: parent.bottom
             left: parent.left
-            leftMargin: root.padding
+            leftMargin: defaultPadding
             right: parent.right
-            rightMargin: root.padding
-        }
-        height: vpx(30)
-
-        FooterImage {
-            id: leftRightButton
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
-            imageSource: "images/assets/dpad_leftright.svg"
-            imageLabel: "Collection Switch"
-            color: switchHelpArea.containsMouse ? colorAmigaOrange : colorAmigaBlue
-            MouseArea {
-                id: switchHelpArea
-                // can also swipe header area
-                anchors.fill: parent
-                onClicked: nextCollection()
-                hoverEnabled: true
-            }
-        }
-
-        FooterImage {
-            id: upDownButton
-            anchors.left: leftRightButton.right
-            anchors.bottom: parent.bottom
-            imageSource: "images/assets/dpad_updown.svg"
-            imageLabel: "Scroll"
-        }
-
-        FooterImage {
-            id: bButton
-            anchors.left: upDownButton.right
-            anchors.bottom: parent.bottom
-            imageSource: "images/assets/button_b.svg"
-            color: selectHelpArea.containsMouse ? colorAmigaOrange : colorAmigaBlue
-            MouseArea {
-                id: selectHelpArea
-                // can also double click game in list
-                anchors.fill: parent
-                onClicked: launchGame()
-                hoverEnabled: true
-            }
-            imageLabel: "Select"
-        }
-
-        FooterImage {
-            id: aButton
-            anchors.left: bButton.right
-            anchors.bottom: parent.bottom
-            imageSource: "images/assets/button_a.svg"
-            imageLabel: "Back"
-            color: backHelpArea.containsMouse ? colorAmigaOrange : colorAmigaBlue
-            MouseArea {
-                id: backHelpArea
-                // can also swipe down on header area
-                anchors.fill: parent
-                onClicked: cancel()
-                hoverEnabled: true
-            }
-        }
-
-        FooterImage {
-            id: xButton
-            anchors.left: aButton.right
-            anchors.bottom: parent.bottom
-            imageSource: "images/assets/button_x.svg"
-            imageLabel: "Toggle Favorite"
-            color: favoriteHelpArea.containsMouse ? colorAmigaOrange : "transparent"
-            MouseArea {
-                id: favoriteHelpArea
-                anchors.fill: parent
-                onClicked: toggleFavorite()
-                hoverEnabled: true
-            }
-        }
-
-        FooterImage {
-            id: yButton
-            anchors.left: xButton.right
-            anchors.bottom: parent.bottom
-            imageSource: "images/assets/button_y.svg"
-            imageLabel: "Move Focus"
-        }
-
-        FooterImage {
-            // can swipe in from right to get pegasus settions
-            // not sure how to trigger that with alternate mouse action?
-            id: startButton
-            anchors.left: yButton.right
-            anchors.bottom: parent.bottom
-            imageSource: "images/assets/button_start.svg"
-            imageLabel: "Settings"
+            rightMargin: defaultPadding
         }
     }
 }

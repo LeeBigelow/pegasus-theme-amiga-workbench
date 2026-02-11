@@ -3,7 +3,7 @@ import "custom_collections"
 
 FocusScope {
     id: root
-    readonly property int padding: vpx(20)
+    readonly property int defaultPadding: vpx(20)
     // Amiga Colors
     readonly property color colorAmigaBlue: "#0057AF"
     readonly property color colorAmigaOrange: "#FF8800"

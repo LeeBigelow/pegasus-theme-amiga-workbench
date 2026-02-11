@@ -1,6 +1,5 @@
 import QtQuick 2.0
-
-// A carousel is a PathView that goes horizontally and keeps its
+// Carousel: A carousel is a PathView that goes horizontally and keeps its
 // current item in the center.
 PathView {
     id: root
