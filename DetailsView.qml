@@ -17,7 +17,7 @@ FocusScope {
     property var currentCollection: collectionsView.currentCollection
     // for theme.qml access
     property alias boxartOrder: boxart.order
-    property alias filterText: filterInput.text
+    property alias filterBox: filterBox
     property alias gameList: gameList
     property alias currentGameIndex: gameList.currentIndex
     property var filteredSourceIndex: filteredGames.mapToSource(currentGameIndex)
@@ -43,7 +43,7 @@ FocusScope {
         sourceModel: currentCollection.games
         filters: RegExpFilter {
                 roleName: "title"
-                pattern: filterInput.text
+                pattern: filterBox.filterInput.text
                 caseSensitivity: Qt.CaseInsensitive
         }
     }
@@ -78,12 +78,11 @@ FocusScope {
         }
     } // end Keys.onPressed
 
-
+    // Background
     Rectangle {
         // dark background
         width: root.width
         height: root.height
-        // background
         anchors.fill: parent
         color: colorAmigaBlue
     }
@@ -99,7 +98,6 @@ FocusScope {
             right: parent.right
             left: parent.left
         }
-
         height: vpx(180)
 
         MouseArea {
@@ -190,11 +188,13 @@ FocusScope {
             } // console+controller inner images
 
             Image {
+                // attach window to top-left of image and shift
+                // up and left for titlebar/border widths
                 id: consoleControllerWindow
                 anchors {
                     top: parent.top
-                    topMargin: vpx(-20)
                     left: parent.left
+                    topMargin: vpx(-20)
                     leftMargin: vpx(-2)
                 }
                 source: "images/assets/details-window-console.png"
@@ -300,65 +300,14 @@ FocusScope {
                 bottomMargin: defaultPadding / 2
             }
             focus: true
-
-            model: filteredGames
-
-            delegate: Rectangle {
-                // rectangle for each gameList item
-                readonly property bool selected: ListView.isCurrentItem
-
-                width: ListView.view.width
-                height: gameTitle.height
-                color: selected ?
-                    (gameList.activeFocus ? "white" : colorAmigaBlue) :
-                    "transparent"
-
-                Text {
-                    id: gameTitle
-                    text: (modelData.favorite ? "♥" : " ") + " " + modelData.title
-                    color: selected ?
-                        (gameList.activeFocus ? colorAmigaBlue : "black") :
-                        "white"
-
-                    font.pixelSize: vpx(20)
-                    font.capitalization: Font.AllUppercase
-                    font.family: amigaFont.name
-                    font.weight: Font.DemiBold
-
-                    // set nice fixed height for amiga font
-                    // some utf8 chars in game titles will cause line
-                    // to not center vertically
-                    lineHeightMode: Text.FixedHeight
-                    lineHeight: vpx(30)
-                    verticalAlignment: Text.AlignVCenter
-
-                    width: parent.width
-                    elide: Text.ElideRight
-                    leftPadding: vpx(5)
-                    rightPadding: vpx(10)
-                }
-
-                MouseArea {
-                    // gameList mouse actions
-                    // focus on click, launch on double click
-                    anchors.fill: parent
-                    onClicked: {
-                        gameList.currentIndex=index;
-                        gameList.forceActiveFocus();
-                    }
-                    onDoubleClicked: launchGame()
-                }
-            } // end gameList delegate rectangle
-
             clip: true
             highlightMoveDuration: 0
-            // highlightRange messing up on resume so disabled
-            // highlightRangeMode: ListView.ApplyRange
-            // preferredHighlightBegin: height * 0.5 - vpx(15)
-            // preferredHighlightEnd: height * 0.5 + vpx(15)
+
+            model: filteredGames
+            delegate: GameListDelegate {}
 
             // gameList move focus
-            KeyNavigation.tab: filterInput
+            KeyNavigation.tab: filterBox.filterInput
             Keys.onPressed: {
                 if (event.isAutoRepeat) {
                     return;
@@ -389,8 +338,8 @@ FocusScope {
         }
     } // end gameList and it's window container
 
-    Item {
-        // filterLabel and filterInput container
+    Text {
+        id: filterLabel
         anchors {
             top: gameListContainer.bottom
             topMargin: vpx(5)
@@ -399,88 +348,27 @@ FocusScope {
             left: parent.left
             leftMargin: defaultPadding
         }
-        width: gameListContainer.width
+        verticalAlignment: Text.AlignVCenter
+        font.family: amigaFont.name
+        font.pixelSize: vpx(16)
+        font.weight: Font.DemiBold
+        color: "white"
+        text: "Filter:"
+    }
 
-        Text {
-            id: filterLabel
-            anchors {
-                top: parent.top
-                left: parent.left
-                verticalCenter: parent.verticalCenter
-            }
-            verticalAlignment: Text.AlignVCenter
-            font.family: amigaFont.name
-            font.pixelSize: vpx(16)
-            font.weight: Font.DemiBold
-            color: "white"
-            text: "Filter:"
+    FilterBox {
+        // has filterInput property alias for accepting focus and getting text
+        id: filterBox
+        anchors {
+            top: gameListContainer.bottom
+            topMargin: vpx(5)
+            bottom: footer.top
+            bottomMargin: defaultPadding / 2
+            left: filterLabel.right
+            leftMargin: vpx(5)
+            right: gameListContainer.right
         }
-
-        Rectangle {
-            id: filterInputBg
-            color: filterInput.activeFocus ? "white" : colorAmigaBlue
-            anchors {
-                top: parent.top
-                left: filterLabel.right
-                leftMargin: vpx(5)
-                bottom: parent.bottom
-                right: parent.right
-            }
-
-            TextInput {
-                id: filterInput
-                anchors {
-                    fill: parent
-                    leftMargin: vpx(5)
-                    rightMargin: vpx(5)
-                    verticalCenter: parent.verticalCenter
-                }
-                focus: true
-                color: filterInput.activeFocus ? colorAmigaBlue : "black"
-                font.family: amigaFont.name
-                font.pixelSize: vpx(16)
-                font.capitalization: Font.AllUppercase
-                verticalAlignment: Text.AlignVCenter
-                KeyNavigation.tab: descriptionScroll
-                Keys.onUpPressed: {
-                    if (currentGameIndex > 0) currentGameIndex--;
-                    gameList.forceActiveFocus();
-                }
-                Keys.onDownPressed: {
-                    if (currentGameIndex < gameList.count - 1) currentGameIndex++;
-                    gameList.forceActiveFocus();
-                }
-                Keys.onPressed: {
-                    // move game index to last item on key press so details refresh
-                    // but not for focus switching keys
-                    if (event.key != Qt.Key_Tab && !api.keys.isDetails(event))
-                        currentGameIndex = gameList.count - 1;
-                    if (event.isAutoRepeat) return;
-                    else if (event.key == Qt.Key_I) {
-                        // catch i key so it doesn't shift focus as Details Key
-                        event.accepted=true;
-                        filterInput.insert(cursorPosition,"i");
-                        return;
-                    } else if (event.key == Qt.Key_Left && cursorPosition == 0) {
-                        // catch left key to stop acidental collection switching
-                        event.accepted=true;
-                        return;
-                    } else if (event.key == Qt.Key_Right && cursorPosition == text.length) {
-                        // catch right key to stop acidental collection switching
-                        event.accepted=true;
-                        return;
-                    } else if (api.keys.isDetails(event)) {
-                        event.accepted = true;
-                        gameList.forceActiveFocus();
-                    } else if (api.keys.isAccept(event)) {
-                        event.accepted = true;
-                        currentGameIndex = gameList.count - 1;
-                        gameList.forceActiveFocus();
-                    }
-                } // end filterInput Keys.OnPressed
-            } // end filterInput TextInput
-        } // end filterInputBg
-    } // end box for filterInput and label
+    }
 
     //
     // Details and Game Art
@@ -500,8 +388,7 @@ FocusScope {
 
         opacity: 0.95
 
-        Rectangle {
-            // need container to control boxart size
+        Boxart {
             id: boxart
             anchors {
                 top: parent.top;
@@ -509,86 +396,7 @@ FocusScope {
                 left: parent.left;
                 leftMargin: defaultPadding / 2
             }
-            focus: true
-            property var order: 0
-            property var boxWidth: vpx(428)
-            property var boxHeight: vpx(321)
-            width: boxartImage.status === Image.Ready ? boxWidth : vpx(5)
-            height: boxHeight
-            color: "transparent"
-            border.width: vpx(1)
-            border.color: activeFocus ? "white" : "transparent"
-            KeyNavigation.tab: gameList
-            // boxart focuses gameList on up/down
-            Keys.onUpPressed: {
-                if (currentGameIndex > 0) currentGameIndex--;
-                gameList.forceActiveFocus();
-            }
-            Keys.onDownPressed: {
-                if (currentGameIndex < gameList.count - 1) currentGameIndex++;
-                gameList.forceActiveFocus();
-            }
-            Keys.onPressed: {
-                if (api.keys.isAccept(event)) {
-                    // cycle boxart
-                    event.accepted = true;
-                    (order < 2) ? order++ : order=0;
-                    return;
-                } else if (api.keys.isDetails(event)) {
-                    event.accepted = true;
-                    favoriteButton.forceActiveFocus();
-                    return;
-                }
-            }
-
-            MouseArea {
-                // swipe gestures for box art
-                // left, right, and double click switches art
-                anchors.fill: parent
-                property int startX
-                onPressed: startX = mouse.x
-                onReleased: {
-                    if (mouse.x - startX > vpx(50))
-                        (boxart.order < 2) ? boxart.order++ : boxart.order=0;
-                    else if (startX - mouse.x > vpx(50))
-                        (boxart.order > 0) ? boxart.order-- : boxart.order=2;
-                }
-                onClicked: boxart.forceActiveFocus()
-                onDoubleClicked: (boxart.order < 2) ? boxart.order++ : boxart.order=0;
-            }
-
-            Image {
-                id: boxartImage
-
-                anchors.fill: parent
-                anchors.centerIn: parent
-                anchors.margins: vpx(2)
-                fillMode: Image.PreserveAspectFit
-                // keep alternative images available when
-                // switching art preference
-                source: switch (boxart.order) {
-                    case 0: return (
-                        currentGame.assets.boxFront ||
-                        currentGame.assets.screenshot ||
-                        currentGame.assets.marquee
-                    );
-                    case 1: return (
-                        currentGame.assets.screenshot ||
-                        currentGame.assets.marquee ||
-                        currentGame.assets.boxFront
-                    );
-                    case 2: return (
-                        currentGame.assets.marquee ||
-                        currentGame.assets.screenshot ||
-                        currentGame.assets.boxFront
-                    );
-                }
-                sourceSize.width: boxart.boxWidth
-                sourceSize.height: boxart.boxHeight
-                width: sourceSize.width
-                height: sourceSize.height
-            } // end boxartImage
-        } // end boxart rectangle
+        }
 
         RatingBar {
             id: ratingBar
@@ -641,62 +449,10 @@ FocusScope {
             GameInfoText { text: Utils.formatPlayers(currentGame.players) }
             GameInfoText { text: Utils.formatLastPlayed(currentGame.lastPlayed) }
             GameInfoText { text: Utils.formatPlayTime(currentGame.playTime) }
-            Rectangle {
-                id: favoriteButton
-                focus: true
-                anchors {
-                    left: parent.left
-                    right:  parent.right
-                    rightMargin: defaultPadding
-                }
-
-                height: vpx(26)
-                color: activeFocus ? colorAmigaOrange :
-                    (favoriteButtonArea.containsMouse ? colorAmigaOrange : "white")
-
-                Image {
-                    anchors.centerIn: parent
-                    fillMode: Image.PreserveAspectFit
-                    source: currentGame.favorite ?
-                        "images/assets/fav_filled.svg" : "images/assets/fav_hollow.svg"
-                    sourceSize.height: detailsTextHeight
-                    height: vpx(20)
-                }
-
-                MouseArea {
-                    id: favoriteButtonArea
-                    anchors.fill: parent
-                    onClicked: toggleFavorite()
-                    hoverEnabled: true
-                }
-
-                // favoriteButton move focus
-                KeyNavigation.tab: boxart
-                Keys.onUpPressed: {
-                    if (currentGameIndex > 0) currentGameIndex--;
-                    gameList.forceActiveFocus();
-                }
-                Keys.onDownPressed: {
-                    if (currentGameIndex < gameList.count - 1) currentGameIndex++;
-                    gameList.forceActiveFocus();
-                }
-                Keys.onPressed: {
-                    if (event.isAutoRepeat) {
-                        return;
-                    } else if (api.keys.isAccept(event)) {
-                        event.accepted = true;
-                        toggleFavorite();
-                        return;
-                    } else if (api.keys.isDetails(event)) {
-                        event.accepted = true;
-                        launchButton.forceActiveFocus();
-                        return;
-                    }
-                }
-            } // end favoriteButton rectangle
+            FavoriteButton { id: favoriteButton }
         }
 
-        Rectangle {
+        LaunchButton {
             id: launchButton
             anchors {
                 top: gameLabels.bottom
@@ -706,52 +462,7 @@ FocusScope {
                 right: parent.right
                 rightMargin: defaultPadding + vpx(18)
             }
-            focus: true
-            color: activeFocus ? colorAmigaOrange :
-                (launchButtonArea.containsMouse ? colorAmigaOrange : "white")
-            height: vpx(26)
-
-            Text {
-                anchors.centerIn: parent
-                text: "LAUNCH"
-                color: parent.activeFocus ? "black" :
-                    (launchButtonArea.containsMouse ? "black" : colorAmigaBlue)
-                font.family: amigaFont.name
-                font.pixelSize: vpx(20)
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            MouseArea {
-                id: launchButtonArea
-                anchors.fill: parent
-                onClicked: launchGame()
-                hoverEnabled: true
-            }
-
-            // Move focus on tab and details key (i)
-            KeyNavigation.tab: favoriteButton
-            Keys.onUpPressed: {
-                if (currentGameIndex > 0) currentGameIndex--;
-                gameList.forceActiveFocus();
-            }
-            Keys.onDownPressed: {
-                if (currentGameIndex < gameList.count - 1) currentGameIndex++;
-                gameList.forceActiveFocus();
-            }
-            Keys.onPressed: {
-                if (event.isAutoRepeat) {
-                    return;
-                } else if (api.keys.isAccept(event)) {
-                    event.accepted = true;
-                    launchGame();
-                    return;
-                } else if (api.keys.isDetails(event)) {
-                    event.accepted = true;
-                    descriptionScroll.forceActiveFocus();
-                    return;
-                }
-            }
-        } // end launchButton
+        }
 
         //
         // Game Description
@@ -771,7 +482,7 @@ FocusScope {
             border.width: vpx(1)
             border.color: descriptionScroll.activeFocus ? "white" : "transparent"
 
-            Flickable {
+            DescriptionScroll {
                 id: descriptionScroll
                 anchors {
                     fill: parent
@@ -780,59 +491,8 @@ FocusScope {
                     leftMargin: defaultPadding
                     rightMargin: defaultPadding
                 }
-                clip: true
-                focus: true
-                onFocusChanged: { contentY = 0; }
-                contentWidth: parent.width
-                contentHeight: gameDescription.height
-                flickableDirection: Flickable.VerticalFlick
-
-                Text {
-                    id: gameDescription
-                    text: currentGame.description
-                    wrapMode: Text.WordWrap
-                    width: descriptionScroll.width
-                    horizontalAlignment: Text.AlignJustify
-                    font.pixelSize: vpx(18)
-                    // set fixed line height or amiga topaz font behaves badly
-                    lineHeightMode: Text.FixedHeight
-                    lineHeight: vpx(22)
-                    font.family: amigaFont.name
-                    font.weight: Font.DemiBold
-                    color: "white"
-                }
-
-                // Keybindings for descriptionScroll
-                // scroll description on up and down
-                Keys.onUpPressed: (contentY - 10) < 0 ?  contentY = 0 : contentY -= 10
-                Keys.onDownPressed: {
-                    (contentY + 10) > (gameDescription.height - height) ?
-                        contentY = gameDescription.height - height :
-                        contentY += 10
-                }
-                // Move focus on tab and details key (i)
-                KeyNavigation.tab: launchButton
-                Keys.onPressed: {
-                    if (event.isAutoRepeat) {
-                        return;
-                    } else if (api.keys.isDetails(event)) {
-                        event.accepted = true;
-                        filterInput.forceActiveFocus();
-                        return;
-                    } else if (api.keys.isAccept(event)) {
-                        event.accepted = true;
-                        gameList.forceActiveFocus();
-                        return;
-                    }
-                }
-
-                MouseArea {
-                    // just focus description on click
-                    anchors.fill: parent
-                    onClicked: descriptionScroll.forceActiveFocus()
-                }
             } // end descriptionScroll
-        } // end description container
+        } // end description rectangle
 
         Image {
             // details window

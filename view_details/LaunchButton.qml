@@ -1,0 +1,50 @@
+import QtQuick 2.0
+// LaunchButton: clickable button launches current game
+Rectangle {
+    id: root
+    focus: true
+    color: activeFocus ? colorAmigaOrange :
+        (launchButtonArea.containsMouse ? colorAmigaOrange : "white")
+    height: vpx(26)
+
+    Text {
+        anchors.centerIn: parent
+        text: "LAUNCH"
+        color: parent.activeFocus ? "black" :
+            (launchButtonArea.containsMouse ? "black" : colorAmigaBlue)
+        font.family: amigaFont.name
+        font.pixelSize: vpx(20)
+        verticalAlignment: Text.AlignVCenter
+    }
+
+    MouseArea {
+        id: launchButtonArea
+        anchors.fill: parent
+        onClicked: launchGame()
+        hoverEnabled: true
+    }
+
+    // Move focus on tab and details key (i)
+    KeyNavigation.tab: favoriteButton
+    Keys.onUpPressed: {
+        if (currentGameIndex > 0) currentGameIndex--;
+        gameList.forceActiveFocus();
+    }
+    Keys.onDownPressed: {
+        if (currentGameIndex < gameList.count - 1) currentGameIndex++;
+        gameList.forceActiveFocus();
+    }
+    Keys.onPressed: {
+        if (event.isAutoRepeat) {
+            return;
+        } else if (api.keys.isAccept(event)) {
+            event.accepted = true;
+            launchGame();
+            return;
+        } else if (api.keys.isDetails(event)) {
+            event.accepted = true;
+            descriptionScroll.forceActiveFocus();
+            return;
+        }
+    }
+} // end launchButton
