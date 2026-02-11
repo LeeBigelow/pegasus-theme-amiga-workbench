@@ -819,6 +819,10 @@ FocusScope {
                         event.accepted = true;
                         filterInput.forceActiveFocus();
                         return;
+                    } else if (api.keys.isAccept(event)) {
+                        event.accepted = true;
+                        gameList.forceActiveFocus();
+                        return;
                     }
                 }
 
