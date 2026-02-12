@@ -4,7 +4,7 @@ Rectangle {
     id: root
     property string imageSource
     property string imageLabel
-    height: vpx(40)
+    height: parent.height
     width: vpx(15) + label.contentWidth + image.paintedWidth
     color: mouseArea.containsMouse ? colorAmigaOrange : "transparent"
 

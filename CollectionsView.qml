@@ -77,7 +77,8 @@ FocusScope {
         // delegate for bgAxis
         id: bgAxisItem
 
-        // background color, titlebar, cosole and controller images and windows
+        // background color, titlebar, icons, game count,
+        // console, controller, and window frame images
         Item {
             anchors.fill: parent
             width: root.width
@@ -166,7 +167,9 @@ FocusScope {
             }
 
             Item {
-                // top third below titlebar container
+                // top container for console and controller window
+                // needed for positioning windows by center offsets
+                // which handles portrait screen sizes better
                 anchors {
                     top: titlebar.bottom
                     left: parent.left
@@ -174,23 +177,7 @@ FocusScope {
                 }
                 height: ( parent.height - systemWindow.height - titlebar.height ) / 2
 
-                // console
-                Image {
-                    id: consoleImage
-                    anchors {
-                        top: parent.top
-                        left: parent.left
-                        centerIn: consoleWindow
-                        verticalCenterOffset: vpx(5)
-                    }
-                    source: currentCollection.shortName ? "images/consolegame/%1.svg".arg(currentCollection.shortName) : ""
-                    sourceSize.width: vpx(530)
-                    sourceSize.height: vpx(165)
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    fillMode: Image.PreserveAspectFit
-                }
-
+                // window frame defines position and size of console image
                 Image {
                     id: consoleWindow
                     anchors {
@@ -206,26 +193,27 @@ FocusScope {
                     width: sourceSize.width
                     height: sourceSize.height
                     visible: consoleImage.status === Image.Ready
+                    z: 9 // stack on top of contents
                 }
 
-
-                // controller
+                // console image, draw image then window frame on top
                 Image {
-                    id: controllerImage
+                    id: consoleImage
                     anchors {
-                        top: parent.top
-                        left: parent.left
-                        centerIn: controllerWindow
-                        verticalCenterOffset: vpx(5)
+                        fill: consoleWindow
+                        // margins account for window titlebar and borders
+                        topMargin: vpx(30)
+                        bottomMargin: vpx(10)
+                        leftMargin: vpx(10)
+                        rightMargin: vpx(10)
                     }
-                    source: currentCollection.shortName ? "images/controller/%1.svg".arg(currentCollection.shortName) : ""
-                    sourceSize.width: vpx(305)
-                    sourceSize.height: vpx(175)
-                    width: sourceSize.width
-                    height: sourceSize.height
+                    source: currentCollection.shortName ? "images/consolegame/%1.svg".arg(currentCollection.shortName) : ""
+                    sourceSize.width: consoleWindow.width
+                    sourceSize.height: consoleWindow.height
                     fillMode: Image.PreserveAspectFit
                 }
 
+                // window frame defines position and size of controller image
                 Image {
                     id: controllerWindow
                     anchors {
@@ -241,6 +229,24 @@ FocusScope {
                     width: sourceSize.width
                     height: sourceSize.height
                     visible: controllerImage.status === Image.Ready
+                    z: 9 // stack on top of contents
+                }
+
+                // controller image inside window but stacked underneath
+                Image {
+                    id: controllerImage
+                    anchors {
+                        fill: controllerWindow
+                        // margins account for window titlebar and borders
+                        topMargin: vpx(30)
+                        bottomMargin: vpx(10)
+                        leftMargin: vpx(10)
+                        rightMargin: vpx(10)
+                    }
+                    source: currentCollection.shortName ? "images/controller/%1.svg".arg(currentCollection.shortName) : ""
+                    sourceSize.width: controllerWindow.width
+                    sourceSize.height: controllerWindow.height
+                    fillMode: Image.PreserveAspectFit
                 }
             } // end container top third windows
         } // end container for titlebar, gamecount, top windows
@@ -291,9 +297,11 @@ FocusScope {
                 left: parent.left
                 top: parent.top
                 centerIn: parent
+                // move up to accommodate window titlebar
                 verticalCenterOffset: vpx(-5)
             }
             source: "images/assets/collections-window-system.png"
+            // slightly taller for window scrollbar
             sourceSize.height: vpx(208)
             sourceSize.width: parent.width
             height: sourceSize.height
@@ -326,13 +334,16 @@ FocusScope {
                 visible: (collectionInfoLabel.text.length > 0)
                 Text {
                     id: collectionInfoLabel
-                    anchors.fill: parent
+                    anchors {
+                        fill: parent
+                        // margins for window titlebar, scrollbar, and borders
+                        topMargin: vpx(28)
+                        leftMargin: vpx(15)
+                        rightMargin: vpx(23)
+                        bottomMargin: vpx(2)
+                    }
                     width: parent.width
                     height: parent.height
-                    topPadding: vpx(28)
-                    leftPadding: vpx(15)
-                    rightPadding: vpx(23)
-                    bottomPadding: vpx(2)
                     wrapMode: Text.Wrap
                     text: collectionInfo.info.join("\n")
                     color: "white"
@@ -364,5 +375,4 @@ FocusScope {
             }
         }
     }
-
 }

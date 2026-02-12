@@ -6,7 +6,6 @@ Rectangle {
     anchors {
         left: parent.left
         right:  parent.right
-        rightMargin: defaultPadding
     }
 
     height: vpx(26)
