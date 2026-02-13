@@ -128,8 +128,8 @@ Item {
         sourceSize.height: logoWindow.height - vpx(30)
         width: sourceSize.width
         height: sourceSize.height
-        // async causing the text label to flash
-        //asynchronous: true
+        // async may cause the text label to flash
+        asynchronous: true
     }
 
     Text {
