@@ -4,7 +4,7 @@ import QtQuick 2.0
 Rectangle {
     id: root
     property alias filterInput: filterInput
-    color: filterInput.activeFocus ? "white" : colorAmigaBlue
+    color: filterInput.activeFocus ? colorAmigaOrange : "white"
 
     TextInput {
         id: filterInput
@@ -16,7 +16,7 @@ Rectangle {
         }
         focus: true
         clip: true
-        color: filterInput.activeFocus ? colorAmigaBlue : "black"
+        color: filterInput.activeFocus ? "black" : colorAmigaBlue
         font.family: amigaFont.name
         font.pixelSize: vpx(16)
         font.capitalization: Font.AllUppercase

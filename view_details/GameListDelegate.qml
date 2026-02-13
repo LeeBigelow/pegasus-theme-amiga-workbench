@@ -8,20 +8,17 @@ Rectangle {
     width: ListView.view.width
     height: gameTitle.height
     color: selected ?
-        (gameList.activeFocus ? "white" : colorAmigaBlue) :
+        (gameList.activeFocus ? colorAmigaOrange : colorAmigaBlue) :
         "transparent"
 
     Text {
         id: gameTitle
         text: (modelData.favorite ? "♥" : " ") + " " + modelData.title
-        color: selected ?
-            (gameList.activeFocus ? colorAmigaBlue : "black") :
-            "white"
+        color: selected ? "black" : "white"
 
         font.pixelSize: vpx(20)
         font.capitalization: Font.AllUppercase
         font.family: amigaFont.name
-        font.weight: Font.DemiBold
 
         // set nice fixed height for amiga font
         // some utf8 chars in game titles will cause line

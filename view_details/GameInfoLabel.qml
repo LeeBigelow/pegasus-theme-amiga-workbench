@@ -5,7 +5,6 @@ Text {
     font.pixelSize: vpx(18)
     font.capitalization: Font.AllUppercase
     font.family: amigaFont.name
-    font.weight: Font.DemiBold
     height: detailsTextHeight
     color: "white"
 }

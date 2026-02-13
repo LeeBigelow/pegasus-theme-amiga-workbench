@@ -10,8 +10,8 @@ Rectangle {
     width: boxartImage.status === Image.Ready ? boxWidth : vpx(5)
     height: boxHeight
     color: "transparent"
-    border.width: vpx(1)
-    border.color: activeFocus ? "white" : "transparent"
+    border.width: vpx(2)
+    border.color: activeFocus ? colorAmigaOrange : "transparent"
     KeyNavigation.tab: gameList
     // boxart focuses gameList on up/down
     Keys.onUpPressed: {

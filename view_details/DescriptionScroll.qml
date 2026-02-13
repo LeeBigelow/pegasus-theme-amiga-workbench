@@ -27,7 +27,6 @@ Flickable {
         lineHeightMode: Text.FixedHeight
         lineHeight: vpx(22)
         font.family: amigaFont.name
-        font.weight: Font.DemiBold
         color: "white"
     }
 

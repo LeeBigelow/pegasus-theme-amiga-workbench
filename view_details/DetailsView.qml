@@ -106,12 +106,13 @@ FocusScope {
             top: header.bottom
             left: parent.left
             leftMargin: defaultPadding
+            bottom: filterBox.top
+            bottomMargin: defaultPadding / 4
         }
         source: gameList.activeFocus ?
             "../images/assets/details-window-games-focused.png" :
             "../images/assets/details-window-games-unfocused.png"
         width: vpx(448)
-        height: vpx(480)
     }
 
     ListView {
@@ -148,14 +149,13 @@ FocusScope {
         id: filterLabel
         anchors {
             top: gameListWindow.bottom
-            topMargin: vpx(5)
+            topMargin: defaultPadding / 4
             left: parent.left
             leftMargin: defaultPadding
         }
         verticalAlignment: Text.AlignVCenter
         font.family: amigaFont.name
         font.pixelSize: vpx(16)
-        font.weight: Font.DemiBold
         color: "white"
         text: "Filter:"
         height: vpx(24)
@@ -165,11 +165,10 @@ FocusScope {
         // has filterInput property alias for accepting focus and getting text
         id: filterBox
         anchors {
-            top: gameListWindow.bottom
-            topMargin: vpx(5)
             left: filterLabel.right
-            leftMargin: vpx(5)
+            leftMargin: defaultPadding / 4
             right: gameListWindow.right
+            bottom: footer.top
         }
         height: vpx(24)
     }
@@ -186,8 +185,8 @@ FocusScope {
             leftMargin: defaultPadding
             right: parent.right
             rightMargin: defaultPadding
+            bottom: footer.top
         }
-        height: vpx(510)
         source: (descriptionScroll.activeFocus ||
                  boxart.activeFocus ||
                  launchButton.activeFocus ||
@@ -289,8 +288,8 @@ FocusScope {
         width: parent.contentWidth
         height: parent.contentHeight
         color: "transparent"
-        border.width: vpx(1)
-        border.color: descriptionScroll.activeFocus ? "white" : "transparent"
+        border.width: vpx(2)
+        border.color: descriptionScroll.activeFocus ? colorAmigaOrange : "transparent"
 
         DescriptionScroll {
             id: descriptionScroll
