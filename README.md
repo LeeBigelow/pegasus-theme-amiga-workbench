@@ -10,9 +10,11 @@ Features:
 - All Games collection
 - Game Description can be focused and scrolled
 - Game List regex filtering
-- Focus Game Art and cycle through other images (if available) with Enter key or Select button
-    - Swiping Left/Right on the game art now also cycles through the images
 - Use TAB, or Details button, to cycle focus between Game List, Filter, Description, and Game Art
+    - Up/Down when focused on Filter, Game Art, Favorite Button, or Launch Button changes the selected game and returns focus to the Game List
+    - Select/Enter when focused on Game Description returns focus to Game List
+- Focus Game Art then cycle through other images (if available) with Enter key or Select button
+    - Swiping Left/Right on the game art now also cycles through the images
 - Added mouse and touch gestures:
     - Collections View:
         - Swipe up on system info to switch to Details View
