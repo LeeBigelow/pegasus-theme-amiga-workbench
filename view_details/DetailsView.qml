@@ -100,7 +100,7 @@ FocusScope {
 
     // Game List size defined by this gameListWindow
     Image {
-        // gameList window frame
+        // gameList window frame sides (stretchable)
         id: gameListWindow
         anchors {
             top: header.bottom
@@ -109,10 +109,30 @@ FocusScope {
             bottom: filterBox.top
             bottomMargin: defaultPadding / 4
         }
-        source: gameList.activeFocus ?
-            "../images/assets/details-window-games-focused.png" :
-            "../images/assets/details-window-games-unfocused.png"
+        source: "../images/assets/window-gamelist-middle.png"
         width: vpx(448)
+    }
+    Image {
+        // gamelist window titlebar, fixed height
+        anchors {
+            top: gameListWindow.top
+            left: gameListWindow.left
+        }
+        width: gameListWindow.width
+        height: vpx(50)
+        source: gameList.activeFocus ?
+            "../images/assets/window-gamelist-top-focused.png" :
+            "../images/assets/window-gamelist-top-unfocused.png"
+    }
+    Image {
+        // gamelist window bottom, fixed height
+        anchors {
+            bottom: gameListWindow.bottom
+            left: gameListWindow.left
+        }
+        width: gameListWindow.width
+        height: vpx(50)
+        source: "../images/assets/window-gamelist-bottom.png"
     }
 
     ListView {
@@ -176,6 +196,8 @@ FocusScope {
     // Game Art, Details and Description
     // Eveything contained in this detailsWindow
     Image {
+        // details window sides, strechable
+        // the actual container for the details
         id: detailsWindow
         // details window
         // show active frame if any children have focus
@@ -187,12 +209,32 @@ FocusScope {
             rightMargin: defaultPadding
             bottom: footer.top
         }
+        source: "../images/assets/window-details-middle.png"
+    }
+    Image {
+        // details window titlebar, fixed height
+        anchors {
+            top: detailsWindow.top
+            left: detailsWindow.left
+        }
+        width: detailsWindow.width
+        height: vpx(50)
         source: (descriptionScroll.activeFocus ||
                  boxart.activeFocus ||
                  launchButton.activeFocus ||
                  favoriteButton.activeFocus) ?
-            "../images/assets/details-window-details-focused.png" :
-            "../images/assets/details-window-details-unfocused.png"
+            "../images/assets/window-details-top-focused.png" :
+            "../images/assets/window-details-top-unfocused.png"
+    }
+    Image {
+        // details window bottom, fixed height
+        anchors {
+            bottom: detailsWindow.bottom
+            left: detailsWindow.left
+        }
+        width: detailsWindow.width
+        height: vpx(50)
+        source: "../images/assets/window-details-bottom.png"
     }
 
     Boxart {

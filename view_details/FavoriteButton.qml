@@ -27,7 +27,8 @@ Rectangle {
     ColorOverlay {
         anchors.fill: favoriteStar
         source: favoriteStar
-        color: parent.activeFocus ? "#000000" : colorAmigaBlue
+        color: parent.activeFocus ? "#000000" :
+            (favoriteButtonArea.containsMouse ? "#000000" : colorAmigaBlue)
     }
 
     MouseArea {

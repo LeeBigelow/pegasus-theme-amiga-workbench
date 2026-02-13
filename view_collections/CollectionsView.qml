@@ -187,7 +187,7 @@ FocusScope {
                         verticalCenterOffset: vpx(-7)
                         horizontalCenterOffset: vpx( -320 )
                     }
-                    source: "../images/assets/collections-window-console.png"
+                    source: "../images/assets/window-console.png"
                     sourceSize.width: vpx(565)
                     sourceSize.height: vpx(215)
                     width: sourceSize.width
@@ -223,7 +223,7 @@ FocusScope {
                         verticalCenterOffset: vpx(-7)
                         horizontalCenterOffset: vpx(200)
                     }
-                    source: "../images/assets/collections-window-controller.png"
+                    source: "../images/assets/window-controller.png"
                     sourceSize.width: vpx(320)
                     sourceSize.height: vpx(215)
                     width: sourceSize.width
@@ -300,7 +300,7 @@ FocusScope {
                 // move up to accommodate window titlebar
                 verticalCenterOffset: vpx(-5)
             }
-            source: "../images/assets/collections-window-system.png"
+            source: "../images/assets/window-systems.png"
             // slightly taller for window scrollbar
             sourceSize.height: vpx(208)
             sourceSize.width: parent.width
@@ -327,7 +327,7 @@ FocusScope {
                     centerIn: parent
                     horizontalCenterOffset: vpx(200)
                 }
-                source: "../images/assets/collections-window-info.png"
+                source: "../images/assets/window-info.png"
                 width: vpx(525)
                 height: vpx(205)
                 asynchronous: true

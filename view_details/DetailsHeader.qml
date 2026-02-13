@@ -54,7 +54,7 @@ Item {
             left: parent.left
             leftMargin: defaultPadding
         }
-        source: "../images/assets/details-window-console.png"
+        source: "../images/assets/window-console-controller.png"
         sourceSize.width: vpx(604)
         sourceSize.height: vpx(122)
         width: sourceSize.width
@@ -106,7 +106,7 @@ Item {
             right: parent.right
             rightMargin: defaultPadding
         }
-        source: "../images/assets/details-window-system.png"
+        source: "../images/assets/window-logo.png"
         sourceSize.width: vpx(604)
         sourceSize.height: vpx(122)
         width: sourceSize.width
