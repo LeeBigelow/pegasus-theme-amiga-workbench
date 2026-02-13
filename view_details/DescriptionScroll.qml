@@ -45,7 +45,7 @@ Flickable {
             return;
         } else if (api.keys.isDetails(event)) {
             event.accepted = true;
-            filterInput.forceActiveFocus();
+            filterBox.filterInput.forceActiveFocus();
             return;
         } else if (api.keys.isAccept(event)) {
             // return focus to gameList on "accept"
