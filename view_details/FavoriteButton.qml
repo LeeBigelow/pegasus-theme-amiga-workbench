@@ -5,12 +5,13 @@ Rectangle {
     focus: true
     anchors {
         left: parent.left
-        right:  parent.right
     }
 
+    width: vpx(160)
     height: vpx(26)
     color: activeFocus ? colorAmigaOrange :
         (favoriteButtonArea.containsMouse ? colorAmigaOrange : "white")
+    visible: currentGameIndex >= 0
 
     Image {
         anchors.centerIn: parent

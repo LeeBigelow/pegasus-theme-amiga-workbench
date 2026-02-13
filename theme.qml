@@ -1,12 +1,15 @@
 import QtQuick 2.0
-import "custom_collections"
+import "view_collections"
+import "view_details"
+import "view_shared"
 
 FocusScope {
     id: root
-    readonly property int defaultPadding: vpx(20)
     // Amiga Colors
     readonly property color colorAmigaBlue: "#0057AF"
     readonly property color colorAmigaOrange: "#FF8800"
+
+    readonly property int defaultPadding: vpx(20)
 
     // Loading the fonts here makes them usable in the rest of the theme
     // and can be referred to using their name and weight.
@@ -66,13 +69,13 @@ FocusScope {
         onNextCollection: {
             gameList.forceActiveFocus();
             filterBox.filterInput.text = "";
-            currentGameIndex=0;
+            currentGameIndex = 0;
             collectionsView.selectNext();
         }
         onPrevCollection: {
             gameList.forceActiveFocus();
             filterBox.filterInput.text = "";
-            currentGameIndex=0;
+            currentGameIndex = 0;
             collectionsView.selectPrev();
         }
         onLaunchGame: {

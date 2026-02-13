@@ -1,11 +1,11 @@
 # Amiga Workbench Pegasus Theme Todo
 
-- [ ] move contents of custom\_collections to view\_shared
-- [ ] move DetailsView and CollectionsView to subfolders
-- [ ] fixed width lauch and favorite buttons, hide if no game
-- [ ] Dummy game details if none selected (empty favorites)
-- [ ] simplify lastplayed collection, remove unneeded collection functions
 - [ ] windows convert png to svg
+- [x] move contents of custom\_collections to view\_shared
+- [x] move DetailsView and CollectionsView to subfolders
+- [x] fixed width launch and favorite buttons, hide if no game
+- [x] Dummy game details if none selected (empty favorites)
+- [x] simplify lastplayed collection, remove unneeded collection functions
 - [x] enter on description moves focus to gameList (better for tablet)
 - [x] DetailsView console+controller window only visible if image
 - [x] description scroll to external qml

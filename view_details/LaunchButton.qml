@@ -1,11 +1,13 @@
 import QtQuick 2.0
-// LaunchButton: clickable button launches current game
+// LaunchButton: A clickable button that launches the current game
 Rectangle {
     id: root
     focus: true
     color: activeFocus ? colorAmigaOrange :
         (launchButtonArea.containsMouse ? colorAmigaOrange : "white")
     height: vpx(26)
+    width: vpx(278)
+    visible: currentGameIndex >= 0
 
     Text {
         anchors.centerIn: parent
@@ -24,8 +26,6 @@ Rectangle {
         hoverEnabled: true
     }
 
-    // Move focus on tab and details key (i)
-    KeyNavigation.tab: favoriteButton
     Keys.onUpPressed: {
         if (currentGameIndex > 0) currentGameIndex--;
         gameList.forceActiveFocus();
@@ -34,6 +34,8 @@ Rectangle {
         if (currentGameIndex < gameList.count - 1) currentGameIndex++;
         gameList.forceActiveFocus();
     }
+    // Move focus on tab and details key (i)
+    KeyNavigation.tab: favoriteButton
     Keys.onPressed: {
         if (event.isAutoRepeat) {
             return;

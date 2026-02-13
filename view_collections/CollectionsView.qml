@@ -1,7 +1,7 @@
 import QtQuick 2.7
-import "collections.js" as CollectionsData // platform info
-import "view_collections"
-import "view_shared"
+import "../view_shared"
+import "../view_shared/collections.js" as CollectionsData // platform info
+
 // CollectionsView: The collections view consists of two carousels, one for the collection logo bar
 // and one for the background images. They should have the same number of elements
 // to be kept in sync.
@@ -70,7 +70,7 @@ FocusScope {
         delegate: bgAxisItem
         currentIndex: logoAxis.currentIndex
 
-        highlightMoveDuration: 0 // instant switching
+        //highlightMoveDuration: 0 // instant switching
     }
 
     Component {
@@ -98,7 +98,7 @@ FocusScope {
                     top: parent.top
                     left: parent.left
                 }
-                source: "images/assets/titlebar.png"
+                source: "../images/assets/titlebar.png"
                 sourceSize.width: parent.width
                 sourceSize.height: vpx(20)
                 width: sourceSize.width
@@ -115,7 +115,7 @@ FocusScope {
                     right: parent.right
                     rightMargin: defaultPadding
                 }
-                source: "images/assets/ramdiskicon.png"
+                source: "../images/assets/ramdiskicon.png"
                 sourceSize.width: vpx(96)
                 sourceSize.height: vpx(46)
                 width: sourceSize.width
@@ -132,7 +132,7 @@ FocusScope {
                     right: parent.right
                     rightMargin: defaultPadding
                 }
-                source: "images/assets/workbenchicon.png"
+                source: "../images/assets/workbenchicon.png"
                 sourceSize.width: vpx(96)
                 sourceSize.height: vpx(46)
                 width: sourceSize.width
@@ -148,7 +148,7 @@ FocusScope {
                     right: parent.right
                     rightMargin: defaultPadding
                 }
-                source: "images/assets/cursor.png"
+                source: "../images/assets/cursor.png"
                 sourceSize.width: vpx(24)
                 sourceSize.height: vpx(23)
                 width: sourceSize.width
@@ -187,7 +187,7 @@ FocusScope {
                         verticalCenterOffset: vpx(-7)
                         horizontalCenterOffset: vpx( -320 )
                     }
-                    source: "images/assets/collections-window-console.png"
+                    source: "../images/assets/collections-window-console.png"
                     sourceSize.width: vpx(565)
                     sourceSize.height: vpx(215)
                     width: sourceSize.width
@@ -207,7 +207,7 @@ FocusScope {
                         leftMargin: vpx(10)
                         rightMargin: vpx(10)
                     }
-                    source: currentCollection.shortName ? "images/consolegame/%1.svg".arg(currentCollection.shortName) : ""
+                    source: currentCollection.shortName ? "../images/consolegame/%1.svg".arg(currentCollection.shortName) : ""
                     sourceSize.width: consoleWindow.width
                     sourceSize.height: consoleWindow.height
                     fillMode: Image.PreserveAspectFit
@@ -223,7 +223,7 @@ FocusScope {
                         verticalCenterOffset: vpx(-7)
                         horizontalCenterOffset: vpx(200)
                     }
-                    source: "images/assets/collections-window-controller.png"
+                    source: "../images/assets/collections-window-controller.png"
                     sourceSize.width: vpx(320)
                     sourceSize.height: vpx(215)
                     width: sourceSize.width
@@ -243,7 +243,7 @@ FocusScope {
                         leftMargin: vpx(10)
                         rightMargin: vpx(10)
                     }
-                    source: currentCollection.shortName ? "images/controller/%1.svg".arg(currentCollection.shortName) : ""
+                    source: currentCollection.shortName ? "../images/controller/%1.svg".arg(currentCollection.shortName) : ""
                     sourceSize.width: controllerWindow.width
                     sourceSize.height: controllerWindow.height
                     fillMode: Image.PreserveAspectFit
@@ -300,7 +300,7 @@ FocusScope {
                 // move up to accommodate window titlebar
                 verticalCenterOffset: vpx(-5)
             }
-            source: "images/assets/collections-window-system.png"
+            source: "../images/assets/collections-window-system.png"
             // slightly taller for window scrollbar
             sourceSize.height: vpx(208)
             sourceSize.width: parent.width
@@ -327,7 +327,7 @@ FocusScope {
                     centerIn: parent
                     horizontalCenterOffset: vpx(200)
                 }
-                source: "images/assets/collections-window-info.png"
+                source: "../images/assets/collections-window-info.png"
                 width: vpx(525)
                 height: vpx(205)
                 asynchronous: true
