@@ -20,8 +20,8 @@ Item {
         fillMode: Image.PreserveAspectFit
 
         source: shortName ? "../images/logo/%1.svg".arg(shortName) : ""
-        // turned off async, causing text title to flash
-        // asynchronous: true
+        // turn off async if fallback text flashing?
+        asynchronous: true
         sourceSize { width: vpx(480); height: vpx(120) } // optimization max render SVGs
 
         scale: selected ? 1.0 : 0.66
