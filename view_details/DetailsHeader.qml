@@ -62,6 +62,7 @@ Item {
         visible: (consoleImage.status === Image.Ready) ||
             (controllerImage.status === Image.Ready)
         z: 9 // stack on top of contents
+        asynchronous: true
     }
 
     Image {
@@ -112,6 +113,7 @@ Item {
         width: sourceSize.width
         height: sourceSize.height
         z: 9 // stack ontop of contents
+        asynchronous: true
     }
 
     Image {

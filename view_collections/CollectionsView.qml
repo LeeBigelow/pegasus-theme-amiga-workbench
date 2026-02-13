@@ -194,6 +194,7 @@ FocusScope {
                     height: sourceSize.height
                     visible: consoleImage.status === Image.Ready
                     z: 9 // stack on top of contents
+                    asynchronous: true
                 }
 
                 // console image, draw image then window frame on top
@@ -211,6 +212,7 @@ FocusScope {
                     sourceSize.width: consoleWindow.width
                     sourceSize.height: consoleWindow.height
                     fillMode: Image.PreserveAspectFit
+                    asynchronous: true
                 }
 
                 // window frame defines position and size of controller image
@@ -230,6 +232,7 @@ FocusScope {
                     height: sourceSize.height
                     visible: controllerImage.status === Image.Ready
                     z: 9 // stack on top of contents
+                    asynchronous: true
                 }
 
                 // controller image inside window but stacked underneath
@@ -247,6 +250,7 @@ FocusScope {
                     sourceSize.width: controllerWindow.width
                     sourceSize.height: controllerWindow.height
                     fillMode: Image.PreserveAspectFit
+                    asynchronous: true
                 }
             } // end container top third windows
         } // end container for titlebar, gamecount, top windows
@@ -330,8 +334,9 @@ FocusScope {
                 source: "../images/assets/window-info.png"
                 width: vpx(525)
                 height: vpx(205)
-                asynchronous: true
                 visible: (collectionInfoLabel.text.length > 0)
+                asynchronous: true
+
                 Text {
                     id: collectionInfoLabel
                     anchors {

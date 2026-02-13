@@ -22,6 +22,7 @@ Rectangle {
             "../images/assets/star_filled.svg" : "../images/assets/star_hollow.svg"
         sourceSize.height: detailsTextHeight
         height: vpx(20)
+        asynchronous: true
     }
 
     ColorOverlay {

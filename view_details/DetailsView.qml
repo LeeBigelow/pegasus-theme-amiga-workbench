@@ -111,6 +111,7 @@ FocusScope {
         }
         source: "../images/assets/window-gamelist-middle.png"
         width: vpx(448)
+        asynchronous: true
     }
     Image {
         // gamelist window titlebar, fixed height
@@ -123,6 +124,7 @@ FocusScope {
         source: gameList.activeFocus ?
             "../images/assets/window-gamelist-top-focused.png" :
             "../images/assets/window-gamelist-top-unfocused.png"
+        asynchronous: true
     }
     Image {
         // gamelist window bottom, fixed height
@@ -133,6 +135,7 @@ FocusScope {
         width: gameListWindow.width
         height: vpx(50)
         source: "../images/assets/window-gamelist-bottom.png"
+        asynchronous: true
     }
 
     ListView {
@@ -210,6 +213,7 @@ FocusScope {
             bottom: footer.top
         }
         source: "../images/assets/window-details-middle.png"
+        asynchronous: true
     }
     Image {
         // details window titlebar, fixed height
@@ -225,6 +229,7 @@ FocusScope {
                  favoriteButton.activeFocus) ?
             "../images/assets/window-details-top-focused.png" :
             "../images/assets/window-details-top-unfocused.png"
+        asynchronous: true
     }
     Image {
         // details window bottom, fixed height
@@ -235,6 +240,7 @@ FocusScope {
         width: detailsWindow.width
         height: vpx(50)
         source: "../images/assets/window-details-bottom.png"
+        asynchronous: true
     }
 
     Boxart {
