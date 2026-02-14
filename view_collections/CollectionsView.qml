@@ -91,20 +91,8 @@ FocusScope {
                 color: colorAmigaBlue
             }
 
-            // titlebar
-            Image {
-                id: titlebar
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                }
-                source: "../images/assets/titlebar.png"
-                sourceSize.width: parent.width
-                sourceSize.height: vpx(20)
-                width: sourceSize.width
-                height: sourceSize.height
-                asynchronous: true
-            }
+            // titlebar, from view_shared
+            AmigaTitlebar { id: titlebar }
 
             // ramdisk icon
             Image {
@@ -178,7 +166,7 @@ FocusScope {
                 height: ( parent.height - systemWindow.height - titlebar.height ) / 2
 
                 // window frame defines position and size of console image
-                Image {
+                AmigaWindow {
                     id: consoleWindow
                     anchors {
                         top: parent.top
@@ -187,14 +175,11 @@ FocusScope {
                         verticalCenterOffset: vpx(-7)
                         horizontalCenterOffset: vpx( -320 )
                     }
-                    source: "../images/assets/window-console.png"
-                    sourceSize.width: vpx(565)
-                    sourceSize.height: vpx(215)
-                    width: sourceSize.width
-                    height: sourceSize.height
+                    title: "Console"
+                    width: vpx(565)
+                    height: vpx(215)
                     visible: consoleImage.status === Image.Ready
                     z: 9 // stack on top of contents
-                    asynchronous: true
                 }
 
                 // console image, draw image then window frame on top
@@ -216,7 +201,7 @@ FocusScope {
                 }
 
                 // window frame defines position and size of controller image
-                Image {
+                AmigaWindow {
                     id: controllerWindow
                     anchors {
                         top: parent.top
@@ -225,14 +210,11 @@ FocusScope {
                         verticalCenterOffset: vpx(-7)
                         horizontalCenterOffset: vpx(200)
                     }
-                    source: "../images/assets/window-controller.png"
-                    sourceSize.width: vpx(320)
-                    sourceSize.height: vpx(215)
-                    width: sourceSize.width
-                    height: sourceSize.height
+                    title: "Controller"
+                    width: vpx(320)
+                    height: vpx(215)
                     visible: controllerImage.status === Image.Ready
                     z: 9 // stack on top of contents
-                    asynchronous: true
                 }
 
                 // controller image inside window but stacked underneath
@@ -295,22 +277,14 @@ FocusScope {
             onItemSelected: collectionSelected()
         }
 
-        Image {
+        AmigaWindow {
             id: systemWindow
-            anchors {
-                left: parent.left
-                top: parent.top
-                centerIn: parent
-                // move up to accommodate window titlebar
-                verticalCenterOffset: vpx(-5)
-            }
-            source: "../images/assets/window-systems.png"
-            // slightly taller for window scrollbar
-            sourceSize.height: vpx(208)
-            sourceSize.width: parent.width
-            height: sourceSize.height
-            width: sourceSize.width
-            asynchronous: true
+            anchors.centerIn: parent
+            height: vpx(208)
+            width: parent.width
+            title: "System"
+            isFocused: true 
+            horizontalScroll: true
         }
 
         // Collection Info section
@@ -323,19 +297,19 @@ FocusScope {
                 bottom: footer.top
             }
 
-            Image {
-                id: collectionInfoWindow
+            AmigaWindow {
+                // system info window
                 anchors {
                     top: parent.top
                     left: parent.left
                     centerIn: parent
                     horizontalCenterOffset: vpx(200)
                 }
-                source: "../images/assets/window-info.png"
                 width: vpx(525)
                 height: vpx(205)
+                title: "System Info"
+                verticalScroll: true
                 visible: (collectionInfoLabel.text.length > 0)
-                asynchronous: true
 
                 Text {
                     id: collectionInfoLabel
@@ -358,7 +332,7 @@ FocusScope {
                     font.family: amigaFont.name
                     elide: Text.ElideRight
                 }
-            } // end collectionInfoWindow
+            }
 
             MouseArea {
                 // swipe up on colleciton info area to switch to detailsView

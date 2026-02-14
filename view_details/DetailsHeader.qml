@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "../view_shared" // AmgiaWindow
 // DetailsHeader: titlebar, console+controller and logo windows
 Item {
     // top header for titlebar, console and logo windows
@@ -21,32 +22,11 @@ Item {
     }
 
     // titlebar
-    Image {
-        id: titlebar
-        anchors {
-            top: parent.top
-            left: parent.left
-        }
-        source: "../images/assets/titlebar.png"
-        sourceSize.width: parent.width
-        sourceSize.height: vpx(20)
-        width: sourceSize.width
-        height: sourceSize.height
-        asynchronous: true
-    }
-
-    // game count in titlebar
-    Text {
-        id: gamecount
-        anchors.centerIn: titlebar
-        text: "%1: %2 GAMES".arg(currentCollection.shortName).arg(currentCollection.games.count)
-        color: colorAmigaBlue
-        font.pixelSize: vpx(16)
-        font.family: amigaFont.name
-    }
+    // called in here to make swipeable as well
+    AmigaTitlebar { id: titlebar }
 
     // console and controller in a window
-    Image {
+    AmigaWindow {
         id: consoleControllerWindow
         anchors {
             top: titlebar.bottom
@@ -54,15 +34,12 @@ Item {
             left: parent.left
             leftMargin: defaultPadding
         }
-        source: "../images/assets/window-console-controller.png"
-        sourceSize.width: vpx(604)
-        sourceSize.height: vpx(122)
-        width: sourceSize.width
-        height: sourceSize.height
+        width: vpx(604)
+        height: vpx(122)
+        title: "Console"
         visible: (consoleImage.status === Image.Ready) ||
             (controllerImage.status === Image.Ready)
         z: 9 // stack on top of contents
-        asynchronous: true
     }
 
     Image {
@@ -99,7 +76,7 @@ Item {
     }
 
     // system logo, or fallback text, in a window
-    Image {
+    AmigaWindow {
         id: logoWindow
         anchors {
             top: titlebar.bottom
@@ -107,13 +84,10 @@ Item {
             right: parent.right
             rightMargin: defaultPadding
         }
-        source: "../images/assets/window-logo.png"
-        sourceSize.width: vpx(604)
-        sourceSize.height: vpx(122)
-        width: sourceSize.width
-        height: sourceSize.height
+        width: vpx(604)
+        height: vpx(122)
+        title: "System"
         z: 9 // stack ontop of contents
-        asynchronous: true
     }
 
     Image {
